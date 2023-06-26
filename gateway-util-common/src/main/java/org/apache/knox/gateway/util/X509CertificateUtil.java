@@ -143,14 +143,14 @@ public class X509CertificateUtil {
 
       // AlgorithmId algo = new AlgorithmId(AlgorithmId.md5WithRSAEncryption_oid);
       Class<?> algorithmIdClass = Class.forName(getAlgorithmIdModuleName());
-      Field RSAField = algorithmIdClass.getDeclaredField("RSAEncryption_oid");
-      RSAField.setAccessible(true);
+      Field md5WithRSAField = algorithmIdClass.getDeclaredField("RSAEncryption_oid");
+      md5WithRSAField.setAccessible(true);
       Class<?> objectIdentifierClass = Class.forName(getObjectIdentifierModuleName());
 
-      Object RSAValue = RSAField.get(algorithmIdClass);
+      Object md5WithRSAValue = md5WithRSAField.get(algorithmIdClass);
 
       Constructor<?> algorithmIdConstr = algorithmIdClass.getConstructor(objectIdentifierClass);
-      Object algorithmIdObject = algorithmIdConstr.newInstance(RSAValue);
+      Object algorithmIdObject = algorithmIdConstr.newInstance(md5WithRSAValue);
 
       // info.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(algo));
       Class<?> certificateAlgorithmIdClass = Class.forName(getCertificateAlgorithmIdModuleName());
