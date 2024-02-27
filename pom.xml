@@ -71,7 +71,6 @@
         <module>gateway-i18n-logging-sl4j</module>
         <module>gateway-spi</module>
         <module>gateway-discovery-ambari</module>
-        <module>gateway-discovery-cm</module>
         <module>gateway-performance-test</module>
         <module>gateway-server</module>
         <module>gateway-server-launcher</module>
@@ -166,8 +165,6 @@
         <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
         <cglib.version>3.3.0</cglib.version>
         <checkstyle.version>8.38</checkstyle.version>
-        <cloudera-manager.version>7.0.3</cloudera-manager.version>
-        <cloudera-manager-api-swagger.version>${cloudera-manager.version}</cloudera-manager-api-swagger.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.15</commons-codec.version>
@@ -1171,11 +1168,6 @@
             <dependency>
                 <groupId>org.apache.knox</groupId>
                 <artifactId>gateway-discovery-ambari</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.knox</groupId>
-                <artifactId>gateway-discovery-cm</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -2265,11 +2257,6 @@
                 <groupId>de.thetaphi</groupId>
                 <artifactId>forbiddenapis</artifactId>
                 <version>${forbiddenapis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.cloudera.api.swagger</groupId>
-                <artifactId>cloudera-manager-api-swagger</artifactId>
-                <version>${cloudera-manager-api-swagger.version}</version>  <!-- or CM version 6.0 and above -->
             </dependency>
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>

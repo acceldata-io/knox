@@ -424,10 +424,6 @@
         </dependency>
         <dependency>
             <groupId>org.apache.knox</groupId>
-            <artifactId>gateway-discovery-cm</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.knox</groupId>
             <artifactId>gateway-adapter</artifactId>
         </dependency>
         <dependency>
