@@ -72,7 +72,9 @@
         <module>gateway-spi</module>
         <module>gateway-spi-common</module>
         <module>gateway-discovery-ambari</module>
+<!--
         <module>gateway-discovery-cm</module>
+-->
         <module>gateway-performance-test</module>
         <module>gateway-server</module>
         <module>gateway-server-launcher</module>
@@ -1205,11 +1207,13 @@
                 <artifactId>gateway-discovery-ambari</artifactId>
                 <version>${project.version}</version>
             </dependency>
+<!--
             <dependency>
                 <groupId>org.apache.knox</groupId>
                 <artifactId>gateway-discovery-cm</artifactId>
                 <version>${project.version}</version>
             </dependency>
+-->
             <dependency>
                 <groupId>org.apache.knox</groupId>
                 <artifactId>gateway-release</artifactId>
