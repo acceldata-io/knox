@@ -1588,6 +1588,10 @@
                         <groupId>com.sun.jersey</groupId>
                         <artifactId>jersey-server</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.github.pjfanning</groupId>
+                        <artifactId>jersey-json</artifactId>
+                    </exclusion>
 
                     <exclusion>
                         <groupId>commons-cli</groupId>
