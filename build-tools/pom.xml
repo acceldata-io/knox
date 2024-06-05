@@ -46,6 +46,20 @@
    </snapshotRepository>
  </distributionManagement>
 
+
+ <repositories>
+<repository>
+            <id>acceldata repo</id>
+            <name>acceldata repo</name>
+            <url>https://repo1.acceldata.dev/repository/odp-central/</url>
+            <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+        </repository>
+ </repositories>
     <scm>
         <connection>scm:git:https://gitbox.apache.org/repos/asf/knox.git</connection>
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/knox.git</developerConnection>
