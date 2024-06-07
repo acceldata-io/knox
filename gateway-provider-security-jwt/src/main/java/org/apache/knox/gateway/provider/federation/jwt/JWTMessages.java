@@ -55,11 +55,17 @@ public interface JWTMessages {
   @Message( level = MessageLevel.WARN, text = "Unable to verify token expiration: {0}" )
   void unableToVerifyExpiration(@StackTrace( level = MessageLevel.DEBUG) Exception e);
 
+  @Message( level = MessageLevel.WARN, text = "Unable to verify passcode token ({0}) due to missing or incorrect token state service configuration.")
+  void unableToVerifyPasscodeToken(String tokenId);
+
   @Message( level = MessageLevel.ERROR, text = "Unable to issue token: {0}" )
   void unableToIssueToken(@StackTrace( level = MessageLevel.DEBUG) Exception e);
 
   @Message( level = MessageLevel.DEBUG, text = "Sending redirect to: {0}" )
   void sendRedirectToLoginURL(String loginURL);
+
+  @Message( level = MessageLevel.INFO, text = "Sending redirect to global logout URL: {0}" )
+  void sendRedirectToLogoutURL(String logoutURL);
 
   @Message( level = MessageLevel.WARN, text = "Configuration for authentication provider URL is missing - will derive default URL." )
   void missingAuthenticationProviderUrlConfiguration();
@@ -76,12 +82,10 @@ public interface JWTMessages {
   @Message( level = MessageLevel.WARN, text = "Unable to derive authentication provider URL: {0}" )
   void failedToDeriveAuthenticationProviderUrl(@StackTrace( level = MessageLevel.ERROR) Exception e);
 
-  @Message( level = MessageLevel.ERROR,
-            text = "The configuration value ({0}) for maximum token verification cache is invalid; Using the default value." )
+  @Message( level = MessageLevel.ERROR, text = "The configuration value ({0}) for maximum token verification cache is invalid; Using the default value." )
   void invalidVerificationCacheMaxConfiguration(String value);
 
-  @Message( level = MessageLevel.ERROR,
-            text = "Missing token passcode." )
+  @Message( level = MessageLevel.ERROR, text = "Missing token passcode." )
   void missingTokenPasscode();
 
   @Message( level = MessageLevel.INFO, text = "Initialized token signature verification cache for the {0} topology." )
@@ -98,4 +102,25 @@ public interface JWTMessages {
 
   @Message( level = MessageLevel.INFO, text = "Unexpected Issuer for token {0} ({1})." )
   void unexpectedTokenIssuer(String tokenDisplayText, String tokenId);
+
+  @Message( level = MessageLevel.WARN, text = "Invalid SSO cookie found! Cleaning up..." )
+  void invalidSsoCookie();
+
+  @Message( level = MessageLevel.WARN, text = "User {0} with SSO token {1} exceeded the configured idle timeout of {2} seconds." )
+  void idleTimoutExceeded(String principal, String tokenId, long idleTimeout);
+
+  @Message( level = MessageLevel.INFO, text = "Idle timeout has been configured to {0} seconds in {1}" )
+  void configuredIdleTimeout(long idleTimeout, String topology);
+
+  @Message(level = MessageLevel.ERROR, text = "Error while fetching grant type and client secret from the request: {0}")
+  void errorFetchingClientSecret(String errorMessage, @StackTrace(level = MessageLevel.DEBUG) Exception e);
+
+  @Message( level = MessageLevel.INFO, text = "Token verification using provided PEM, verified: {0}" )
+  void publicKeyVerification(boolean verified);
+
+  @Message( level = MessageLevel.INFO, text = "Token verification using provided JWKS Url, verified: {0}" )
+  void jwksVerification(boolean verified);
+
+  @Message( level = MessageLevel.INFO, text = "Token verification using knox signing cert, verified: {0}" )
+  void signingKeyVerification(boolean verified);
 }
