@@ -39,6 +39,18 @@
         <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/knox.git</developerConnection>
         <url>https://gitbox.apache.org/repos/asf/knox.git</url>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Releases</name>
+            <url>https://repo1.acceldata.dev/repository/odp-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Snapshot</name>
+            <url>https://repo1.acceldata.dev/repository/odp-snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <mailingLists>
         <mailingList>
@@ -71,7 +83,9 @@
         <module>gateway-i18n-logging-sl4j</module>
         <module>gateway-spi</module>
         <module>gateway-discovery-ambari</module>
+        <!--
         <module>gateway-discovery-cm</module>
+        -->
         <module>gateway-performance-test</module>
         <module>gateway-server</module>
         <module>gateway-server-launcher</module>
@@ -494,6 +508,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <resources>
+                        <resource>
+                            <directory>*:*</directory>
+                            <excludes>
+                                <exclude>**/Log4j2Plugins.dat</exclude>
+                            </excludes>
+                        </resource>
+                    </resources>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -688,6 +712,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>**/Log4j2Plugins.dat</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
