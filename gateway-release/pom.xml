@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.knox</groupId>
         <artifactId>gateway</artifactId>
-        <version>1.6.1.3.2.2.0-2</version>
+        <version>1.6.1.3.3.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>gateway-release</artifactId>
@@ -423,7 +423,12 @@
             <groupId>org.apache.knox</groupId>
             <artifactId>gateway-discovery-ambari</artifactId>
         </dependency>
-        -->
+<!--
+        <dependency>
+            <groupId>org.apache.knox</groupId>
+            <artifactId>gateway-discovery-cm</artifactId>
+        </dependency>
+-->
         <dependency>
             <groupId>org.apache.knox</groupId>
             <artifactId>gateway-adapter</artifactId>
