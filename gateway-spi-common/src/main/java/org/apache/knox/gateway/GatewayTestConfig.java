@@ -32,6 +32,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -1051,5 +1052,71 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   public boolean isAsyncSupported() {
     return false;
   }
+
+  @Override
+  public boolean canSeeAllTokens(String userName) {
+    return false;
+  }
+
+  @Override
+  public Map<String, Collection<String>> getApplicationPathAliases() {
+    return Collections.emptyMap();
+  }
+
+  @Override
+  public long getServiceDiscoveryConnectTimeoutMillis() {
+    return -1;
+  }
+
+  @Override
+  public long getServiceDiscoveryReadTimeoutMillis() {
+    return -1;
+  }
+
+  @Override
+  public long getServiceDiscoveryWriteTimeoutMillis() {
+    return -1;
+  }
+
+  @Override
+  public boolean skipTokenMigration() {
+    return true;
+  }
+
+  @Override
+  public boolean archiveMigratedTokens() {
+    return false;
+  }
+
+  @Override
+  public boolean migrateExpiredTokens() {
+    return false;
+  }
+
+  @Override
+  public boolean printVerboseTokenMigrationMessages() {
+    return false;
+  }
+
+  @Override
+  public int getTokenMigrationProgressCount() {
+    return 1;
+  }
+
+  @Override
+  public String getHttpClientCookieSpec() {
+    return null;
+  }
+
+  @Override
+  public String getBannerText() {
+    return null;
+  }
+
+  @Override
+  public long getJwksOutageCacheTTL() {
+    return TimeUnit.HOURS.toMillis(2);
+  }
+
 
 }

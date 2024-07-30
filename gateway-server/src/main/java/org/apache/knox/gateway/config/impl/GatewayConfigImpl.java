@@ -165,7 +165,7 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   public static final String WEBSHELL_READ_BUFFER_SIZE = GATEWAY_CONFIG_FILE_PREFIX + ".webshell.read.buffer.size";
 
   /**
-   * Properties for for gateway port mapping feature
+   * Properties for gateway port mapping feature
    */
   public static final String GATEWAY_PORT_MAPPING_PREFIX = GATEWAY_CONFIG_FILE_PREFIX + ".port.mapping.";
   public static final String GATEWAY_PORT_MAPPING_REGEX = GATEWAY_CONFIG_FILE_PREFIX + "\\.port\\.mapping\\..*";
@@ -332,6 +332,11 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
 
   private static final String GATEWAY_SERVLET_ASYNC_SUPPORTED = GATEWAY_CONFIG_FILE_PREFIX + ".servlet.async.supported";
   private static final boolean GATEWAY_SERVLET_ASYNC_SUPPORTED_DEFAULT = false;
+
+  private static final String GATEWAY_HEALTH_CHECK_TOPOLOGIES = GATEWAY_CONFIG_FILE_PREFIX + ".health.check.topologies";
+
+  private static final String JWKS_OUTAGE_CACHE_TTL = GATEWAY_CONFIG_FILE_PREFIX + ".jwks.outage.cache.ttl";;
+  private static final long JWKS_OUTAGE_CACHE_TTL_DEFAULT = TimeUnit.HOURS.toMillis(2);
 
   public GatewayConfigImpl() {
     init();
@@ -1479,6 +1484,83 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   @Override
   public boolean isAsyncSupported() {
     return getBoolean(GATEWAY_SERVLET_ASYNC_SUPPORTED, GATEWAY_SERVLET_ASYNC_SUPPORTED_DEFAULT);
+  }
+
+  @Override
+  public boolean canSeeAllTokens(String userName) {
+    final Collection<String> usersCanSeeAllTokens = getTrimmedStringCollection(USERS_CAN_SEE_ALL_TOKENS);
+    return usersCanSeeAllTokens == null ? false : usersCanSeeAllTokens.contains(userName);
+  }
+
+  @Override
+  public Map<String, Collection<String>> getApplicationPathAliases() {
+    return getPathAliases(".application");
+  }
+
+  @Override
+  public long getServiceDiscoveryConnectTimeoutMillis() {
+    return getLong(CLOUDERA_MANAGER_SERVICE_DISCOVERY_CONNECT_TIMEOUT, CLOUDERA_MANAGER_SERVICE_DISCOVERY_CONNECT_TIMEOUT_DEFAULT);
+  }
+
+  @Override
+  public long getServiceDiscoveryReadTimeoutMillis() {
+    return getLong(CLOUDERA_MANAGER_SERVICE_DISCOVERY_READ_TIMEOUT, CLOUDERA_MANAGER_SERVICE_DISCOVERY_READ_TIMEOUT_DEFAULT);
+  }
+
+  @Override
+  public long getServiceDiscoveryWriteTimeoutMillis() {
+    return getLong(CLOUDERA_MANAGER_SERVICE_DISCOVERY_WRITE_TIMEOUT, CLOUDERA_MANAGER_SERVICE_DISCOVERY_WRITE_TIMEOUT_DEFAULT);
+  }
+
+  private Map<String, Collection<String>> getPathAliases(String qualifier) {
+    final String prefix = GATEWAY_CONFIG_FILE_PREFIX + qualifier + DEPLOYMENT_PATH_ALIAS;
+    final Map<String, Collection<String>> pathAliases = new HashMap<>();
+    this.forEach(config -> {
+      if (config.getKey().startsWith(prefix)) {
+        pathAliases.put(config.getKey().substring(prefix.length()).toLowerCase(Locale.getDefault()), getTrimmedStringCollection(config.getKey()));
+      }
+    });
+    return pathAliases;
+  }
+
+  @Override
+  public boolean skipTokenMigration() {
+    return getBoolean(SKIP_TOKEN_MIGRATION, false);
+  }
+
+  @Override
+  public boolean archiveMigratedTokens() {
+    return getBoolean(ARCHIVE_MIGRATED_TOKENS, false);
+  }
+
+  @Override
+  public boolean migrateExpiredTokens() {
+    return getBoolean(MIGRATE_EXPIRED_TOKENS, false);
+  }
+
+  @Override
+  public boolean printVerboseTokenMigrationMessages() {
+    return getBoolean(TOKEN_MIGRATION_PRINTS_VERBOSE_MESSAGES, true);
+  }
+
+  @Override
+  public int getTokenMigrationProgressCount() {
+    return getInt(TOKEN_MIGRATION_PROGRESS_COUNT, 10);
+  }
+
+  @Override
+  public String getHttpClientCookieSpec() {
+    return get(HTTP_CLIENT_COOKIE_SPEC);
+  }
+
+  @Override
+  public String getBannerText() {
+    return get(UI_BANNER_TEXT, "");
+  }
+
+  @Override
+  public long getJwksOutageCacheTTL() {
+    return getLong(JWKS_OUTAGE_CACHE_TTL, JWKS_OUTAGE_CACHE_TTL_DEFAULT);
   }
 
 }
