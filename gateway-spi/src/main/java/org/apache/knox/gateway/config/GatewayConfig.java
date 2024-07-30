@@ -113,7 +113,9 @@ public interface GatewayConfig {
 
   int DEFAULT_CM_SERVICE_DISCOVERY_MAX_RETRY_ATTEMPTS = 3;
 
-  String DEFAULT_API_SERVICES_VIEW_VERSION = "v2";
+  String DEFAULT_API_SERVICES_VIEW_VERSION = "v1";
+
+  String DEPLOYMENT_PATH_ALIAS = ".path.alias.";
 
   /**
    * The location of the gateway configuration.
@@ -749,6 +751,18 @@ public interface GatewayConfig {
   int getClouderaManagerServiceDiscoveryMaximumRetryAttempts();
 
   /**
+   * @return a collection of comma separated service types that should be excluded
+   *         from CM service discovery (e.g. HDFS, KNOX, RANGER, HIVE, etc...)
+   */
+  Collection<String> getClouderaManagerServiceDiscoveryExcludedServiceTypes();
+
+  /**
+   * @return a collection of comma separated role types that should be excluded
+   *         from CM service discovery (e.g. KNOX_GATEWAY, IDBROKER, DATANODE, HIVEMETASTORE, etc...)
+   */
+  Collection<String> getClouderaManagerServiceDiscoveryExcludedRoleTypes();
+
+  /**
    * @return true, if state for tokens issued by the Knox Token service should be managed by Knox.
    */
   boolean isServerManagedTokenStateEnabled();
@@ -880,9 +894,71 @@ public interface GatewayConfig {
 
   long getConcurrentSessionVerifierExpiredTokensCleaningPeriod();
 
+  Set<String> getHealthCheckTopologies();
+
   /**
    * @return true if the async supported flag is enabled in jetty gateway servlet; false otherwise (defaults to false)
    */
   boolean isAsyncSupported();
 
+  /**
+   * @return <code>true</code> if the supplied user is allowed to see all tokens
+   *         (i.e. not only tokens where userName or createdBy equals to the
+   *         userName) on the Token Management page; <code>false</code> otherwise
+   */
+  boolean canSeeAllTokens(String userName);
+
+  Map<String, Collection<String>> getApplicationPathAliases();
+
+  long getServiceDiscoveryConnectTimeoutMillis();
+
+  long getServiceDiscoveryReadTimeoutMillis();
+
+  long getServiceDiscoveryWriteTimeoutMillis();
+
+  /**
+   * @return <code>true</code> if token migration must be skipped when a
+   *         JDBC-based TSS starts; <code>false</code> otherwise
+   */
+  boolean skipTokenMigration();
+
+  /**
+   * @return <code>true</code> if migrated tokens must be archived when a
+   *         JDBC-based starts; <code>false</code> otherwise
+   */
+  boolean archiveMigratedTokens();
+
+  /**
+   * @return <code>true</code> if expired tokens must be migrated when a
+   *         JDBC-based starts; <code>false</code> otherwise
+   */
+  boolean migrateExpiredTokens();
+
+  /**
+   * @return <code>true</code> if the token migration tool should print verbose
+   *         messages when a JDBC-based starts; <code>false</code> otherwise
+   */
+  boolean printVerboseTokenMigrationMessages();
+
+  /**
+   * @return the number of tokens after the token migration tool displays progress
+   *         in the logs when a JDBC-based TSS starts.
+   */
+  int getTokenMigrationProgressCount();
+
+  /**
+   * @return CookieSpec for the HTTP client used by the dispatch, see org.apache.http.client.config.CookieSpecs
+   */
+  String getHttpClientCookieSpec();
+
+  /**
+   * @return a text that should be displayed on all Knox UIs within the banner on the top.
+   */
+  String getBannerText();
+
+  /**
+   * The time to live of the cached JWK set to cover outages, in milliseconds.
+   * @return jwks outage cache TTL
+   */
+  long getJwksOutageCacheTTL();
 }
