@@ -245,7 +245,7 @@
         <mina.version>2.0.21</mina.version>
         <netty.version>4.1.56.Final</netty.version>
         <nimbus-jose-jwt.version>8.14.1</nimbus-jose-jwt.version>
-        <nodejs.version>v12.18.2</nodejs.version>
+        <nodejs.version>v12.19.0</nodejs.version>
         <okhttp.version>2.7.5</okhttp.version>
         <opensaml.version>3.4.5</opensaml.version>
         <pac4j.version>4.3.0</pac4j.version>
