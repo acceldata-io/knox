@@ -49,7 +49,7 @@ public class ServiceModel implements Comparable<ServiceModel> {
   static final String HIVE_SERVICE_NAME = "HIVE";
   static final String HIVE_SERVICE_URL_TEMPLATE = "jdbc:hive2://%s:%d/;ssl=true;transportMode=http;httpPath=%s/%s/hive";
   static final String IMPALA_SERVICE_NAME = "IMPALA";
-  static final String IMPALA_SERVICE_URL_TEMPLATE = "jdbc:impala://%s:%d/;ssl=1;transportMode=http;httpPath=%s/%s/impala;AuthMech=3";
+  static final String IMPALA_SERVICE_URL_TEMPLATE = "jdbc:impala://%s:%d/;ssl=1;transportMode=http;httpPath=%s/%s/impala";
 
   public enum Type {
     API, UI, API_AND_UI, UNKNOWN
