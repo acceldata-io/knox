@@ -23,8 +23,8 @@ limitations under the License.
             <job-tracker>${jobTracker}</job-tracker>
             <name-node>hdfs://sandbox:8020</name-node>
             <streaming>
-                <mapper>python wordcount.py map</mapper>
-                <reducer>python wordcount.py reduce</reducer>
+                <mapper>ambari-python-wrap wordcount.py map</mapper>
+                <reducer>ambari-python-wrap wordcount.py reduce</reducer>
             </streaming>
             <configuration>
                 <property>
