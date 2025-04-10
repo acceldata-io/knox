@@ -76,7 +76,7 @@
 
   <!-- namenode rules  -->
   <rule dir="IN" name="HDFSUI/hdfs/inbound/namenode/root" pattern="*://*:*/**/hdfs/">
-    <rewrite template="{$serviceUrl[HDFSUI]}/"/>
+    <rewrite template="{$serviceUrl[HDFSUI]}/dfshealth.html"/>
   </rule>
   <rule dir="IN" name="HDFSUI/hdfs/inbound/namenode/dfs" pattern="*://*:*/**/hdfs/dfshealth.html">
     <rewrite template="{$serviceUrl[HDFSUI]}/dfshealth.html"/>
