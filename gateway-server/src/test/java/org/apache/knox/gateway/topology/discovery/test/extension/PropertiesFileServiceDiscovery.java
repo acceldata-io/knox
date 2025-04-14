@@ -46,7 +46,9 @@ class PropertiesFileServiceDiscovery implements ServiceDiscovery {
         return TYPE;
     }
 
-    private Map<String, ServiceDiscovery.Cluster> discover(ServiceDiscoveryConfig discoveryConfig) {
+    @Override
+    public Map<String, ServiceDiscovery.Cluster> discover(GatewayConfig gatewayConfig,
+                                                          ServiceDiscoveryConfig discoveryConfig) {
 
         Map<String, ServiceDiscovery.Cluster> result = new HashMap<>();
 
@@ -109,7 +111,7 @@ class PropertiesFileServiceDiscovery implements ServiceDiscovery {
     public ServiceDiscovery.Cluster discover(GatewayConfig          gwConfig,
                                              ServiceDiscoveryConfig discoveryConfig,
                                              String                 clusterName) {
-        Map<String, ServiceDiscovery.Cluster> clusters = discover(discoveryConfig);
+        Map<String, ServiceDiscovery.Cluster> clusters = discover(gwConfig, discoveryConfig);
         return clusters.get(clusterName);
     }
 

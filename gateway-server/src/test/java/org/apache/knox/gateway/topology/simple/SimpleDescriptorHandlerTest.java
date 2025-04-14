@@ -824,24 +824,38 @@ public class SimpleDescriptorHandlerTest {
 
     @Test
     public void shouldAllowKnoxServiceWithoutUrlsAndParams() throws Exception {
+      final String clusterName = "testCluster";
       File providerConfig =  File.createTempFile("testKnoxProvider", ".xml");
       FileUtils.write(providerConfig, TEST_PROVIDER_CONFIG, StandardCharsets.UTF_8);
+
+      final File discoveryConfig = File.createTempFile("testKnoxDiscoveryConfig", ".properties");
+      final Properties discoveryProperties = new Properties();
+      discoveryProperties.setProperty(clusterName + ".name", clusterName);
+
+      try (OutputStream outputStream = Files.newOutputStream(discoveryConfig.toPath())){
+          discoveryProperties.store(outputStream, null);
+      }
 
       File topologyFile = null;
       try {
         final File destDir = new File(System.getProperty("java.io.tmpdir")).getCanonicalFile();
         final GatewayConfig gc = EasyMock.createNiceMock(GatewayConfig.class);
 
-        final SimpleDescriptorImpl testDescriptor = new SimpleDescriptorImpl();
-        testDescriptor.setProviderConfig(providerConfig.getAbsolutePath());
+        final SimpleDescriptor testDescriptor = EasyMock.createNiceMock(SimpleDescriptor.class);
+        EasyMock.expect(testDescriptor.getName()).andReturn("testKnoxDescriptor").anyTimes();
+        EasyMock.expect(testDescriptor.getProviderConfig()).andReturn(providerConfig.getAbsolutePath()).anyTimes();
+        EasyMock.expect(testDescriptor.getDiscoveryAddress()).andReturn(discoveryConfig.getAbsolutePath()).anyTimes();
+        EasyMock.expect(testDescriptor.getDiscoveryType()).andReturn("PROPERTIES_FILE").anyTimes();
+        EasyMock.expect(testDescriptor.getDiscoveryUser()).andReturn(null).anyTimes();
+        EasyMock.expect(testDescriptor.getCluster()).andReturn(clusterName).anyTimes();
 
         final SimpleDescriptor.Service knoxService = EasyMock.createNiceMock(SimpleDescriptor.Service.class);
         EasyMock.expect(knoxService.getName()).andReturn("KNOX").anyTimes();
         EasyMock.expect(knoxService.getURLs()).andReturn(null).anyTimes();
         EasyMock.expect(knoxService.getParams()).andReturn(null).anyTimes();
         List<SimpleDescriptor.Service> serviceMocks = Collections.singletonList(knoxService);
-        testDescriptor.setServices(serviceMocks);
-        EasyMock.replay(gc, knoxService);
+        EasyMock.expect(testDescriptor.getServices()).andReturn(serviceMocks).anyTimes();
+        EasyMock.replay(gc, knoxService, testDescriptor);
 
         final Map<String, File> handleResult = SimpleDescriptorHandler.handle(gc, testDescriptor, destDir, destDir);
         topologyFile = handleResult.get(SimpleDescriptorHandler.RESULT_TOPOLOGY);
@@ -852,6 +866,7 @@ public class SimpleDescriptorHandlerTest {
         assertThat(topologyXml, hasXPath("/topology/service/role", is(equalTo("KNOX"))));
       } finally {
         providerConfig.delete();
+        discoveryConfig.delete();
         if (topologyFile != null) {
           topologyFile.delete();
         }
