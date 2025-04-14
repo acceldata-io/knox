@@ -39,7 +39,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -354,11 +353,6 @@ class AmbariServiceDiscovery implements ServiceDiscovery {
         }
 
         return cluster;
-    }
-
-    @Override
-    public Cluster discover(GatewayConfig gwConfig, ServiceDiscoveryConfig config, String clusterName, Collection<String> includedServices) {
-      throw new UnsupportedOperationException("Filtering Ambari service discovery by service names is not supported!");
     }
 
 }

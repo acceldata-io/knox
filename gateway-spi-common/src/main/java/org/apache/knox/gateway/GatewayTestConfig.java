@@ -17,6 +17,11 @@
  */
 package org.apache.knox.gateway;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.knox.gateway.config.GatewayConfig;
+import org.apache.knox.gateway.config.impl.GatewayConfigImpl;
+
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
@@ -28,14 +33,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.knox.gateway.config.GatewayConfig;
 
 public class GatewayTestConfig extends Configuration implements GatewayConfig {
 
@@ -49,12 +49,6 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   public static final int DEFAULT_WEBSOCKET_ASYNC_WRITE_TIMEOUT = 60000;
   public static final int DEFAULT_WEBSOCKET_IDLE_TIMEOUT = 300000;
   public static final int DEFAULT_WEBSOCKET_MAX_WAIT_BUFFER_COUNT = 100;
-  private static final boolean DEFAULT_WEBSHELL_FEATURE_ENABLED = false ;
-  private static final boolean DEFAULT_WEBSHELL_AUDIT_LOGGING_ENABLED = false;
-  public static final int DEFAULT_WEBSHELL_MAX_CONCURRENT_SESSIONS = 3;
-  public static final int  DEFAULT_WEBSHELL_READ_BUFFER_SIZE = 1024;
-
-
 
   private Path gatewayHomePath = Paths.get("gateway-home");
   private String hadoopConfDir = "hadoop";
@@ -79,10 +73,6 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   private ConcurrentMap<String, Integer> topologyPortMapping = new ConcurrentHashMap<>();
   private int backupVersionLimit = -1;
   private long backupAgeLimit = -1;
-
-  public GatewayTestConfig(Properties props) {
-   super.getProps().putAll(props);
-  }
 
   public GatewayTestConfig() {
 
@@ -133,16 +123,6 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
-  public String getGatewayPIDDir() {
-    return getGatewayPIDPath().toString();
-  }
-
-  private Path getGatewayPIDPath() {
-    return gatewayHomePath.resolve("pid");
-  }
-
-
-  @Override
   public String getGatewaySecurityDir() {
     return getGatewaySecurityPath().toString();
   }
@@ -176,10 +156,8 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
-  public List<String> getGatewayHost() {
-    List<String> hosts = new ArrayList<>();
-    hosts.add(gatewayHost);
-    return hosts;
+  public String getGatewayHost() {
+    return gatewayHost;
   }
 
   @Override
@@ -197,14 +175,8 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
-  public List<InetSocketAddress> getGatewayAddress() throws UnknownHostException {
-    List<String> hostIps = getGatewayHost();
-    int port = getGatewayPort();
-    List<InetSocketAddress> socketAddressList = new ArrayList<>();
-    for (String host : hostIps) {
-      socketAddressList.add(new InetSocketAddress( host, port ));
-    }
-    return socketAddressList;
+  public InetSocketAddress getGatewayAddress() throws UnknownHostException {
+    return new InetSocketAddress( getGatewayHost(), getGatewayPort() );
   }
 
   @Override
@@ -304,19 +276,14 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
-  public Set<String> getIncludedSSLProtocols() {
-    return Collections.singleton("TLSv1.2");
-  }
-
-  @Override
-  public List<String> getExcludedSSLProtocols() {
+  public List getExcludedSSLProtocols() {
     List<String> protocols = new ArrayList<>();
     protocols.add("SSLv3");
     return protocols;
   }
 
   @Override
-  public List<String> getIncludedSSLCiphers() {
+  public List getIncludedSSLCiphers() {
     return includedSSLCiphers;
   }
 
@@ -325,13 +292,8 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
-  public List<String> getExcludedSSLCiphers() {
+  public List getExcludedSSLCiphers() {
     return excludedSSLCiphers;
-  }
-
-  @Override
-  public boolean isSSLRenegotiationAllowed() {
-    return true;
   }
 
   public void setExcludedSSLCiphers( List<String> list ) {
@@ -560,26 +522,6 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
-  public boolean isWebShellEnabled() {
-    return DEFAULT_WEBSHELL_FEATURE_ENABLED;
-  }
-
-  @Override
-  public boolean isWebShellAuditLoggingEnabled() {
-    return DEFAULT_WEBSHELL_AUDIT_LOGGING_ENABLED;
-  }
-
-  @Override
-  public int getMaximumConcurrentWebshells() {
-    return DEFAULT_WEBSHELL_MAX_CONCURRENT_SESSIONS;
-  }
-
-  @Override
-  public int getWebShellReadBufferSize() {
-    return DEFAULT_WEBSHELL_READ_BUFFER_SIZE;
-  }
-
-  @Override
   public int getWebsocketMaxTextMessageSize() {
     return DEFAULT_WEBSOCKET_MAX_TEXT_MESSAGE_SIZE;
   }
@@ -778,19 +720,7 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   public List<String> getReadOnlyOverrideTopologyNames() {
     List<String> readOnly = new ArrayList<>();
 
-    String value = get("gateway.read.only.override.topologies");
-    if (value != null && !value.isEmpty()) {
-      readOnly.addAll(Arrays.asList(value.trim().split("\\s*,\\s*")));
-    }
-
-    return readOnly;
-  }
-
-  @Override
-  public List<String> getReadOnlyOverrideProviderNames() {
-    List<String> readOnly = new ArrayList<>();
-
-    String value = get("gateway.read.only.override.providers");
+    String value = get(GatewayConfigImpl.READ_ONLY_OVERRIDE_TOPOLOGIES);
     if (value != null && !value.isEmpty()) {
       readOnly.addAll(Arrays.asList(value.trim().split("\\s*,\\s*")));
     }
@@ -859,16 +789,6 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   @Override
   public long getClouderaManagerAdvancedServiceDiscoveryConfigurationMonitoringInterval() {
     return 0;
-  }
-
-  @Override
-  public long getClouderaManagerServiceDiscoveryRepositoryEntryTTL() {
-    return 0;
-  }
-
-  @Override
-  public int getClouderaManagerServiceDiscoveryMaximumRetryAttempts() {
-    return -1;
   }
 
   @Override
@@ -997,53 +917,4 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
     return null;
   }
 
-  @Override
-  public int getJettyMaxFormContentSize() {
-    return 0;
-  }
-
-  @Override
-  public int getJettyMaxFormKeys() {
-    return 0;
-  }
-
-  @Override
-  public int getPrivilegedUsersConcurrentSessionLimit() {
-    return 0;
-  }
-
-  @Override
-  public int getNonPrivilegedUsersConcurrentSessionLimit() {
-    return 0;
-  }
-
-  @Override
-  public Set<String> getSessionVerificationPrivilegedUsers() {
-    return null;
-  }
-
-  @Override
-  public Set<String> getSessionVerificationUnlimitedUsers() {
-    return null;
-  }
-
-  @Override
-  public long getDbRemoteConfigMonitorPollingInterval() {
-    return 30;
-  }
-
-  @Override
-  public int getDbRemoteConfigMonitorCleanUpInterval() {
-    return 1;
-  }
-
-  @Override
-  public long getConcurrentSessionVerifierExpiredTokensCleaningPeriod() {
-    return 0;
-  }
-
-  @Override
-  public boolean isAsyncSupported() {
-    return false;
-  }
 }

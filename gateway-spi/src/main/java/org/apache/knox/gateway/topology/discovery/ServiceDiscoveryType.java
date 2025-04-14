@@ -16,8 +16,6 @@
  */
 package org.apache.knox.gateway.topology.discovery;
 
-import org.apache.knox.gateway.config.GatewayConfig;
-
 /**
  * ServiceDiscovery extensions must implement this interface to add support for a new discovery source.
  *
@@ -37,6 +35,6 @@ public interface ServiceDiscoveryType {
      *
      * @return A new instance of the ServiceDiscovery implementation provided by this type.
      */
-    ServiceDiscovery newInstance(GatewayConfig gatewayConfig);
+    ServiceDiscovery newInstance();
 
 }

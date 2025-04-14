@@ -109,10 +109,6 @@ public interface GatewayConfig {
 
   String PROXYUSER_SERVICES_IGNORE_DOAS = "gateway.proxyuser.services.ignore.doas";
 
-  long DEFAULT_CM_SERVICE_DISCOVERY_CACHE_ENTRY_TTL = 600; // 10 minutes
-
-  int DEFAULT_CM_SERVICE_DISCOVERY_MAX_RETRY_ATTEMPTS = 3;
-
   /**
    * The location of the gateway configuration.
    * Subdirectories will be: topologies
@@ -128,15 +124,9 @@ public interface GatewayConfig {
   String getGatewayDataDir();
 
   /**
-   * The location of the process PIDs spawned by gateway during runtime.
-   * @return The location of the process PIDs spawned by gateway during runtime.
+   * The location of the gateway services definition's root directory
+   * @return The location of the gateway services top level directory.
    */
-  String getGatewayPIDDir();
-
-    /**
-     * The location of the gateway services definition's root directory
-     * @return The location of the gateway services top level directory.
-     */
   String getGatewayServicesDir();
 
   /**
@@ -147,7 +137,7 @@ public interface GatewayConfig {
 
   String getHadoopConfDir();
 
-  List<String> getGatewayHost();
+  String getGatewayHost();
 
   int getGatewayPort();
 
@@ -173,19 +163,15 @@ public interface GatewayConfig {
 
   String getGatewayDeploymentDir();
 
-  List<InetSocketAddress> getGatewayAddress() throws UnknownHostException;
+  InetSocketAddress getGatewayAddress() throws UnknownHostException;
 
   boolean isSSLEnabled();
-
-  Set<String> getIncludedSSLProtocols();
 
   List<String> getExcludedSSLProtocols();
 
   List<String> getIncludedSSLCiphers();
 
   List<String> getExcludedSSLCiphers();
-
-  boolean isSSLRenegotiationAllowed();
 
   boolean isHadoopKerberosSecured();
 
@@ -365,36 +351,6 @@ public interface GatewayConfig {
    * @return true if websocket feature is enabled
    */
   boolean isWebsocketEnabled();
-
-
-  /**
-   * Returns true if webshell feature enabled else false.
-   * Default is false.
-   * @since 2.0.0
-   * @return true if webshell feature is enabled
-   */
-  boolean isWebShellEnabled();
-
-  /**
-   * Returns true if webshell logging enabled else false.
-   * Default is false.
-   * @since 2.0.0
-   * @return true if webshell logging is enabled
-   */
-  boolean isWebShellAuditLoggingEnabled();
-
-
-  /**
-   * Returns the maximum number of allowed concurrent webshells
-   * @since 2.0.0
-   */
-  int getMaximumConcurrentWebshells();
-
-  /**
-   * Returns the read buffer size for Web Shell
-   * @since 2.0.0
-   */
-  int getWebShellReadBufferSize();
 
   /**
    * Websocket connection max text message size.
@@ -629,11 +585,6 @@ public interface GatewayConfig {
   List<String> getReadOnlyOverrideTopologyNames();
 
   /**
-   * Get the list of those topology names which should be treated as read-only.
-   */
-  List<String> getReadOnlyOverrideProviderNames();
-
-  /**
    * Get the comma separated list of group names that represent Knox Admin users
    * @return comma separate list of admin group names
    */
@@ -730,21 +681,6 @@ public interface GatewayConfig {
    * @return the monitoring interval (in milliseconds) of Cloudera Manager advanced service discovery configuration
    */
   long getClouderaManagerAdvancedServiceDiscoveryConfigurationMonitoringInterval();
-
-  /**
-   * @return the entry TTL in seconds in CM service discovery repository cache where we store service/role configurations
-   */
-  long getClouderaManagerServiceDiscoveryRepositoryEntryTTL();
-
-  /**
-   * The maximum number of attempts to try connecting to a configured Cloudera
-   * Manager endpoint in case a communication related exception is caught when
-   * trying to discover the configured cluster.
-   * <p>
-   * Setting this configuration to <code>-1</code> indicates the user does not
-   * want to retry the failed service discovery.
-   */
-  int getClouderaManagerServiceDiscoveryMaximumRetryAttempts();
 
   /**
    * @return true, if state for tokens issued by the Knox Token service should be managed by Knox.
@@ -855,26 +791,4 @@ public interface GatewayConfig {
 
   String getDatabaseSslTruststoreFileName();
 
-  int getJettyMaxFormContentSize();
-
-  int getJettyMaxFormKeys();
-
-  int getPrivilegedUsersConcurrentSessionLimit();
-
-  int getNonPrivilegedUsersConcurrentSessionLimit();
-
-  Set<String> getSessionVerificationPrivilegedUsers();
-
-  Set<String> getSessionVerificationUnlimitedUsers();
-
-  long getDbRemoteConfigMonitorPollingInterval();
-
-  int getDbRemoteConfigMonitorCleanUpInterval();
-
-  long getConcurrentSessionVerifierExpiredTokensCleaningPeriod();
-
-  /**
-   * @return true if the async supported flag is enabled in jetty gateway servlet; false otherwise (defaults to false)
-   */
-  boolean isAsyncSupported();
 }

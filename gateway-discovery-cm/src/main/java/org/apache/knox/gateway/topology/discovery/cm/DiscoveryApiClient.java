@@ -62,10 +62,6 @@ public class DiscoveryApiClient extends ApiClient {
     configure(gatewayConfig, aliasService, trustStore);
   }
 
-  ServiceDiscoveryConfig getConfig() {
-    return config;
-  }
-
   boolean isKerberos() {
     return isKerberos;
   }

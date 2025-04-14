@@ -45,7 +45,6 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +72,7 @@ public class SimpleDescriptorHandler {
      */
     public static final String RESULT_REFERENCE = "reference";
 
-    private static final String DEFAULT_DISCOVERY_TYPE = "ClouderaManager";
+    private static final String DEFAULT_DISCOVERY_TYPE = "AMBARI";
 
     private static final String[] PROVIDER_CONFIG_FILE_EXTENSIONS;
     static {
@@ -242,15 +241,14 @@ public class SimpleDescriptorHandler {
         // Use the cached discovery object for the required type, if it has already been loaded
         ServiceDiscovery sd = discoveryInstances.get(discoveryType);
         if (sd == null) {
-            sd = ServiceDiscoveryFactory.get(discoveryType, config, gatewayServices);
+            sd = ServiceDiscoveryFactory.get(discoveryType, gatewayServices);
             if (sd == null) {
                 throw new IllegalArgumentException("Unsupported service discovery type: " + discoveryType);
             }
             discoveryInstances.put(discoveryType, sd);
         }
 
-        final Collection<String> includedServices = desc.getServices().stream().map(service -> service.getName()).collect(Collectors.toSet());
-        return sd.discover(config, sdc, desc.getCluster(), includedServices);
+        return sd.discover(config, sdc, desc.getCluster());
     }
 
 

@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,11 +112,6 @@ class PropertiesFileServiceDiscovery implements ServiceDiscovery {
                                              String                 clusterName) {
         Map<String, ServiceDiscovery.Cluster> clusters = discover(gwConfig, discoveryConfig);
         return clusters.get(clusterName);
-    }
-
-    @Override
-    public ServiceDiscovery.Cluster discover(GatewayConfig gwConfig, ServiceDiscoveryConfig config, String clusterName, Collection<String> includedServices) {
-      return discover(gwConfig, config, clusterName);
     }
 
 

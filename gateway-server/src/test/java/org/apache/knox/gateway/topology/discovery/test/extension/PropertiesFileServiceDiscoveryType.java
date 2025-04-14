@@ -17,7 +17,6 @@
  */
 package org.apache.knox.gateway.topology.discovery.test.extension;
 
-import org.apache.knox.gateway.config.GatewayConfig;
 import org.apache.knox.gateway.topology.discovery.ServiceDiscovery;
 import org.apache.knox.gateway.topology.discovery.ServiceDiscoveryType;
 
@@ -30,7 +29,7 @@ public class PropertiesFileServiceDiscoveryType implements
     }
 
     @Override
-    public ServiceDiscovery newInstance(GatewayConfig gatewayConfig) {
+    public ServiceDiscovery newInstance() {
         return new PropertiesFileServiceDiscovery();
     }
 

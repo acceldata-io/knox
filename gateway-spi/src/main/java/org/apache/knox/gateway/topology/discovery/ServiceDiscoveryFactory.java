@@ -22,7 +22,6 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.knox.gateway.config.GatewayConfig;
 import org.apache.knox.gateway.services.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,23 +44,14 @@ public abstract class ServiceDiscoveryFactory {
   }
 
   public static Set<ServiceDiscovery> getAllServiceDiscoveries() {
-    return getAllServiceDiscoveries(null);
-  }
-
-  public static Set<ServiceDiscovery> getAllServiceDiscoveries(GatewayConfig gatewayConfig) {
     final Set<ServiceDiscovery> serviceDiscoveries = new HashSet<>();
-    ServiceLoader.load(ServiceDiscoveryType.class).forEach((serviceDiscoveryType) -> {
-      serviceDiscoveries.add(serviceDiscoveryType.newInstance(gatewayConfig));
-    });
+    ServiceLoader.load(ServiceDiscoveryType.class).forEach((serviceDiscoveryType) ->
+        serviceDiscoveries.add(serviceDiscoveryType.newInstance()));
     return serviceDiscoveries;
   }
 
   public static ServiceDiscovery get(String type, Service... gatewayServices) {
-    return get(type, null, gatewayServices);
-  }
-
-  public static ServiceDiscovery get(String type, GatewayConfig gatewayConfig, Service... gatewayServices) {
-    final ServiceDiscovery sd = getAllServiceDiscoveries(gatewayConfig).stream().filter(serviceDiscovery -> serviceDiscovery.getType().equalsIgnoreCase(type)).findFirst().orElse(null);
+    final ServiceDiscovery sd = getAllServiceDiscoveries().stream().filter(serviceDiscovery -> serviceDiscovery.getType().equalsIgnoreCase(type)).findFirst().orElse(null);
     // Inject any gateway services that were specified, and which are referenced in the impl
     injectGatewayServices(sd, gatewayServices);
     return sd;
@@ -85,5 +75,4 @@ public abstract class ServiceDiscoveryFactory {
       }
     }
   }
-
 }
