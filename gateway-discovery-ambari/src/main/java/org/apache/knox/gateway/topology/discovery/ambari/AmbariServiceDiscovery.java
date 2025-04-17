@@ -328,7 +328,7 @@ class AmbariServiceDiscovery implements ServiceDiscovery {
 
     @Override
     public Cluster discover(GatewayConfig gwConfig, ServiceDiscoveryConfig config, String clusterName, Collection<String> includedServices) {
-      throw new UnsupportedOperationException("Filtering Ambari service discovery by service names is not supported!");
+        return discover(gwConfig, config, clusterName);
     }
 
 }
