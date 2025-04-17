@@ -73,7 +73,7 @@ public class SimpleDescriptorHandler {
      */
     public static final String RESULT_REFERENCE = "reference";
 
-    private static final String DEFAULT_DISCOVERY_TYPE = "ClouderaManager";
+    private static final String DEFAULT_DISCOVERY_TYPE = "Ambari";
 
     private static final String[] PROVIDER_CONFIG_FILE_EXTENSIONS;
     static {
