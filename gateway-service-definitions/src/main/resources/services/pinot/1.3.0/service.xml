@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<service name="pinot" role="PINOT" version="1.3.0">
+    <metadata>
+        <context>/pinot</context> <!-- Removed trailing slash for consistency -->
+        <description>Apache Pinot Controller UI and REST</description>
+        <shortDesc>Pinot Dashboard and API</shortDesc>
+        <type>UI</type>
+    </metadata>
+
+    <dispatch classname="org.apache.knox.gateway.dispatch.ConfigurableDispatch" use-two-way-ssl="false">
+        <param>
+            <name>responseExcludeHeaders</name>
+            <value>CONTENT-LENGTH</value>
+        </param>
+        <param>
+            <name>preserveQueryString</name>
+            <value>true</value>
+        </param>
+    </dispatch>
+
+    <routes>
+        <!-- UI and Asset Routes -->
+        <route path="/pinot/"/>
+        <route path="/pinot/index.html"/>
+        <route path="/pinot/assets/**"/>
+        <route path="/pinot/static/**"/>
+        <route path="/pinot/js/**"/>
+
+        <!-- Pinot REST API Routes -->
+        <route path="/pinot/tables"/>
+        <route path="/pinot/tables/**"/>
+        <route path="/pinot/tenants"/>
+        <route path="/pinot/cluster/**"/>
+
+        <!-- Generic fallback -->
+        <route path="/pinot/**"/>
+        <route path="/pinot/auth/info"/>
+        <route path="/pinot/zk/**"/>
+        <route path="/pinot/zk/ls"/>
+        <route path="/pinot/zk/ls/**"/>
+        <route path="/pinot/help/**"/>
+
+        <route path="/pinot/zk/get"/>
+        <route path="/pinot/zk/get/**"/>
+
+        <route path="/pinot/zk/lsl"/>
+        <route path="/pinot/zk/lsl/**"/>
+
+        <route path="/pinot/zk/stat"/>
+        <route path="/pinot/zk/stat/**"/>
+
+        <route path="/help"/>
+        <route path="/swagger.json"/>
+        <route path="/swaggerui-dist/**"/>
+
+        <route path="/pinot/help"/>
+        <route path="/pinot/swagger.json"/>
+        <route path="/pinot/swaggerui-dist/**"/>
+        <route path="/pinot/swaggerui-dist/"/>
+        <route path="/pinot/swaggerui-dist/swagger-ui-bundle.js"/>
+        <route path="/pinot/swaggerui-dist/swagger-ui-standalone-preset.js"/>
+
+
+    </routes>
+</service>
