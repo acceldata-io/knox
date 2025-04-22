@@ -79,7 +79,31 @@
         <rewrite template="{$serviceUrl[PINOT]}/help"/>
     </rule>
 
-    <!-- Swagger JSON -->
+        <!-- Swagger JSON -->
+    <rule dir="IN" name="PINOT/swagger-json" pattern="*://*:*/**/pinot/swagger.json">
+        <rewrite template="{$serviceUrl[PINOT]}/swagger.json"/>
+    </rule>
+  
+    <rule dir="OUT" name="PINOT/swagger-json-basepath">
+        <match pattern="{$serviceUrl[PINOT]}/swagger.json"/>
+        <filter type="response">
+            <content type="application/json">
+                <apply path="$.basePath" rule="pathModifier"/>
+            </content>
+        </filter>
+        <rewrite template="{$serviceUrl[PINOT]}/swagger.json"/>
+    </rule>
+  
+    <!-- Rule to modify the basePath -->
+    <filter name="pathModifier">
+        <content type="text/plain">
+            <apply path="$" rule="updatePath"/>
+        </content>
+    </filter>
+  
+    <rule name="updatePath" pattern="/">
+        <rewrite template="{$frontend[path]}/pinot/"/>
+    </rule>
     <rule name="PINOT/swagger-json" pattern="*://*:*/**/pinot/swagger.json">
         <rewrite template="{$serviceUrl[PINOT]}/swagger.json"/>
     </rule>
