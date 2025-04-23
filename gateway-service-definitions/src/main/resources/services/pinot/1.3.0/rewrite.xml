@@ -1,20 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rules>
 
-    <!-- UI routes -->
-    <rule name="PINOT/ui-root" pattern="*://*:*/**/pinot/">
+    <!-- Root -->
+    <rule name="PINOT/inbound/ui-root" pattern="*://*:*/**/*/pinot/">
         <rewrite template="{$serviceUrl[PINOT]}/"/>
     </rule>
-    <rule name="PINOT/ui-index" pattern="*://*:*/**/pinot/index.html">
+
+    <rule name="PINOT/inbound/ui-rootu" pattern="*://*:*/**/*/pinot">
+        <rewrite template="{$serviceUrl[PINOT]}/"/>
+    </rule>
+    <!-- index.html -->
+    <rule name="PINOT/inbound/ui-index" pattern="*://*:*/**/pinot/index.html">
         <rewrite template="{$serviceUrl[PINOT]}/index.html"/>
     </rule>
-    <rule name="PINOT/ui-assets" pattern="*://*:*/**/pinot/assets/{**}">
+
+    <!-- assets -->
+    <rule name="PINOT/inbound/ui-assets" pattern="*://*:*/**/pinot/assets/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/assets/{**}"/>
     </rule>
-    <rule name="PINOT/ui-static" pattern="*://*:*/**/pinot/static/{**}">
+
+    <!-- static -->
+    <rule name="PINOT/inbound/ui-static" pattern="*://*:*/**/pinot/static/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/static/{**}"/>
     </rule>
-    <rule name="PINOT/ui-js" pattern="*://*:*/**/pinot/js/{**}">
+
+    <!-- js/main.js and other JS files -->
+    <rule name="PINOT/inbound/ui-js" pattern="*://*:*/**/pinot/js/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/js/{**}"/>
+    </rule>
+
+    <rule name="PINOT/inbound/ui-jsi" pattern="*://*:*/**/js/{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/js/{**}"/>
+    </rule>
+
+    <!-- Auth info -->
+    <rule name="PINOT/auth-info" pattern="*://*:*/**/pinot/auth/info">
+        <rewrite template="{$serviceUrl[PINOT]}/auth/info"/>
     </rule>
 
     <!-- Pinot REST API Routes -->
@@ -31,11 +52,6 @@
 
     <rule name="PINOT/api-cluster" pattern="*://*:*/**/pinot/cluster/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/cluster/{**}"/>
-    </rule>
-
-    <!-- Auth info -->
-    <rule name="PINOT/auth-info" pattern="*://*:*/**/pinot/auth/info">
-        <rewrite template="{$serviceUrl[PINOT]}/auth/info"/>
     </rule>
 
     <!-- ZooKeeper API calls -->
@@ -61,29 +77,20 @@
         <rewrite template="{$serviceUrl[PINOT]}/zk/stat?{path=**}"/>
     </rule>
 
-
-
-
-
-
-
-
     <!-- Catch-all fallback -->
     <rule name="PINOT/fallback" pattern="*://*:*/**/pinot/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/{**}"/>
     </rule>
-
-
     <!-- Swagger UI Help Endpoint -->
     <rule name="PINOT/swagger-help" pattern="*://*:*/**/pinot/help">
         <rewrite template="{$serviceUrl[PINOT]}/help"/>
     </rule>
 
-        <!-- Swagger JSON -->
+    <!-- Swagger JSON -->
     <rule dir="IN" name="PINOT/swagger-json" pattern="*://*:*/**/pinot/swagger.json">
         <rewrite template="{$serviceUrl[PINOT]}/swagger.json"/>
     </rule>
-  
+
     <rule dir="OUT" name="PINOT/swagger-json-basepath">
         <match pattern="{$serviceUrl[PINOT]}/swagger.json"/>
         <filter type="response">
@@ -93,19 +100,16 @@
         </filter>
         <rewrite template="{$serviceUrl[PINOT]}/swagger.json"/>
     </rule>
-  
+
     <!-- Rule to modify the basePath -->
     <filter name="pathModifier">
         <content type="text/plain">
             <apply path="$" rule="updatePath"/>
         </content>
     </filter>
-  
+
     <rule name="updatePath" pattern="/">
         <rewrite template="{$frontend[path]}/pinot/"/>
-    </rule>
-    <rule name="PINOT/swagger-json" pattern="*://*:*/**/pinot/swagger.json">
-        <rewrite template="{$serviceUrl[PINOT]}/swagger.json"/>
     </rule>
 
     <!-- Swagger UI Assets -->
