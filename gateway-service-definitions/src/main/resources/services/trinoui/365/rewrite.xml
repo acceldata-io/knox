@@ -16,17 +16,25 @@
 -->
 <rules>
     <rule dir="IN" name="TRINOUI/trinoui/inbound" pattern="*://*:*/**/trino/">
-        <rewrite template="{$serviceUrl[TRINOUI]}/ui/login.html"/>
+        <rewrite template="{$serviceUrl[TRINOUI]}/ui/"/>
     </rule>
 
-    <rule dir="IN" name="TRINOUI/trinoui/inbound/trino/vendor" pattern="*://*:*/**/trino/ui/vendor/{**}?{**}">
+    <rule dir="IN" name="TRINOUI/trinoui/inbound" pattern="*://*:*/**/trino/workers.html">
+        <rewrite template="{$serviceUrl[TRINOUI]}/ui/workers.html"/>
+    </rule>
+
+    <rule dir="IN" name="TRINOUI/trinoui/inbound" pattern="*://*:*/**/trino/worker.html?{*}">
+        <rewrite template="{$serviceUrl[TRINOUI]}/ui/worker.html?{*}"/>
+    </rule>
+
+    <rule dir="IN" name="TRINOUI/trinoui/inbound/trino/vendor" pattern="*://*:*/**/trino/vendor/{**}?{**}">
         <rewrite template="{$serviceUrl[TRINOUI]}/ui/vendor/{**}?{**}"/>
     </rule>
-    <rule dir="IN" name="TRINOUI/trinoui/inbound/trino/assets" pattern="*://*:*/**/trino/ui/assets/{**}?{**}">
+    <rule dir="IN" name="TRINOUI/trinoui/inbound/trino/assets" pattern="*://*:*/**/trino/assets/{**}?{**}">
         <rewrite template="{$serviceUrl[TRINOUI]}/ui/assets/{**}?{**}"/>
     </rule>
 
-    <rule dir="IN" name="TRINOUI/trinoui/inbound/trino/dist" pattern="*://*:*/**/trino/ui/dist/{**}?{**}">
+    <rule dir="IN" name="TRINOUI/trinoui/inbound/trino/dist-root" pattern="*://*:*/**/trino/dist/{**}?{**}">
         <rewrite template="{$serviceUrl[TRINOUI]}/ui/dist/{**}?{**}"/>
     </rule>
 
@@ -63,6 +71,9 @@
     </rule>
 
     <rule flow="OR" dir="OUT" name="TRINOUI/trino/outbound/headers/location">
+        <match pattern="*://*:*/ui/">
+            <rewrite template="{$frontend[url]}/ui/"/>
+        </match>
         <match pattern="*://*:*/ui/login.html">
             <rewrite template="{$frontend[url]}/trino/"/>
         </match>
