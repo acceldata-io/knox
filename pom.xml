@@ -2676,5 +2676,12 @@
             <artifactId>easymock</artifactId>
             <scope>test</scope>
         </dependency>
+<dependency>
+    <groupId>jakarta.activation</groupId>
+    <artifactId>jakarta.activation-api</artifactId>
+    <version>1.2.1</version>
+    <scope>runtime</scope>
+</dependency>
+
     </dependencies>
 </project>
