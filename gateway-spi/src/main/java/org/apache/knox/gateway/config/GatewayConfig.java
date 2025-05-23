@@ -113,7 +113,7 @@ public interface GatewayConfig {
 
   int DEFAULT_CM_SERVICE_DISCOVERY_MAX_RETRY_ATTEMPTS = 3;
 
-  String DEFAULT_API_SERVICES_VIEW_VERSION = "v1";
+  String DEFAULT_API_SERVICES_VIEW_VERSION = "v2";
 
   /**
    * The location of the gateway configuration.
