@@ -243,13 +243,12 @@
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-test</artifactId>
             <scope>test</scope>
-<exclusions>
-<exclusion>
-<groupId>org.xerial.snappy</groupId>
-<artifactId>snappy-java</artifactId>
-</exclusion>
-</exclusions>
-
+            <exclusions>
+                <exclusion>
+                    <groupId>org.xerial.snappy</groupId>
+                    <artifactId>snappy-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

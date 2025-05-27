@@ -197,13 +197,12 @@
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
             <scope>test</scope>
-<exclusions>
-<exclusion>
-<groupId>ch.qos.reload4j</groupId>
-<artifactId>reload4j</artifactId>
-</exclusion>
-</exclusions>
-
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.reload4j</groupId>
+                    <artifactId>reload4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -211,10 +210,10 @@
             <version>${hadoop.version}</version>
             <type>test-jar</type>
             <exclusions>
-<exclusion>
-<groupId>ch.qos.reload4j</groupId>
-<artifactId>reload4j</artifactId>
-</exclusion>
+            <exclusion>
+                <groupId>ch.qos.reload4j</groupId>
+                <artifactId>reload4j</artifactId>
+            </exclusion>
                 <exclusion>
                     <groupId>com.google.code.findbugs</groupId>
                     <artifactId>jsr305</artifactId>
