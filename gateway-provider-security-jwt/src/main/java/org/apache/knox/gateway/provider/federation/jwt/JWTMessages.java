@@ -98,25 +98,4 @@ public interface JWTMessages {
 
   @Message( level = MessageLevel.INFO, text = "Unexpected Issuer for token {0} ({1})." )
   void unexpectedTokenIssuer(String tokenDisplayText, String tokenId);
-
-  @Message( level = MessageLevel.WARN, text = "Invalid SSO cookie found! Cleaning up..." )
-  void invalidSsoCookie();
-
-  @Message( level = MessageLevel.WARN, text = "User {0} with SSO token {1} exceeded the configured idle timeout of {2} seconds." )
-  void idleTimoutExceeded(String principal, String tokenId, long idleTimeout);
-
-  @Message( level = MessageLevel.INFO, text = "Idle timeout has been configured to {0} seconds in {1}" )
-  void configuredIdleTimeout(long idleTimeout, String topology);
-
-  @Message(level = MessageLevel.ERROR, text = "Error while fetching grant type and client secret from the request: {0}")
-  void errorFetchingClientSecret(String errorMessage, @StackTrace(level = MessageLevel.DEBUG) Exception e);
-
-  @Message( level = MessageLevel.INFO, text = "Token verification using provided PEM, verified: {0}" )
-  void publicKeyVerification(boolean verified);
-
-  @Message( level = MessageLevel.INFO, text = "Token verification using provided JWKS Url, verified: {0}" )
-  void jwksVerification(boolean verified);
-
-  @Message( level = MessageLevel.INFO, text = "Token verification using knox signing cert, verified: {0}" )
-  void signingKeyVerification(boolean verified);
 }
