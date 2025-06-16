@@ -17,7 +17,6 @@
  */
 package org.apache.knox.gateway.services.security.token;
 
-import java.net.URI;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Set;
 
@@ -34,7 +33,4 @@ public interface JWTokenAuthority {
   boolean verifyToken(JWT token, RSAPublicKey publicKey) throws TokenServiceException;
 
   boolean verifyToken(JWT token, String jwksurl, String algorithm, Set<JOSEObjectType> allowedJwsTypes) throws TokenServiceException;
-
-  boolean verifyToken(JWT token, Set<URI> jwksurls, String algorithm, Set<JOSEObjectType> allowedJwsTypes) throws TokenServiceException;
-
 }
