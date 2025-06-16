@@ -187,9 +187,9 @@
         <checkstyle.version>8.38</checkstyle.version>
         <cloudera-manager.version>7.8.1</cloudera-manager.version>
         <cloudera-manager-api-swagger.version>${cloudera-manager.version}</cloudera-manager-api-swagger.version>
-        <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <commons-cli.version>1.4</commons-cli.version>
-        <commons-codec.version>1.15</commons-codec.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
+        <commons-cli.version>1.4</commons-cli.version>guava
+        <commons-codec.version>1.15</commons-codec.version>guava
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
