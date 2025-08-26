@@ -27,7 +27,7 @@
 
     <groupId>org.apache.knox</groupId>
     <artifactId>gateway</artifactId>
-    <version>2.0.0.3.3.6.1-SNAPSHOT</version>
+    <version>2.0.0.3.3.6.2-1</version>
     <packaging>pom</packaging>
 
     <name>gateway</name>
@@ -157,12 +157,12 @@
     <repository>
       <id>nexus-releases</id>
       <name>Releases</name>
-     <url>https://repo1.acceldata.dev/repository/odp-staging-release/</url>
+     <url>https://repo1.acceldata.dev/repository/odp-release/</url>
    </repository>
    <snapshotRepository>
      <id>nexus-snapshots</id>
      <name>Snapshot</name>
-     <url>https://repo1.acceldata.dev/repository/odp-staging-snapshot/</url>
+     <url>https://repo1.acceldata.dev/repository/odp-snapshot/</url>
    </snapshotRepository>
  </distributionManagement>
 
@@ -180,18 +180,20 @@
         <ant-nodeps.version>1.8.1</ant-nodeps.version>
         <asm.version>9.0</asm.version>
         <aspectj.version>1.9.6</aspectj.version>
-        <bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
+        <asynchttpclient.version>4.1.5</asynchttpclient.version>
+        <bcprov-jdk18on.version>1.78</bcprov-jdk18on.version>
+        <bcpkix-jdk18on.version>1.78</bcpkix-jdk18on.version>
         <ben-manes.caffeine.version>2.8.8</ben-manes.caffeine.version>
         <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
         <cglib.version>3.3.0</cglib.version>
         <checkstyle.version>8.38</checkstyle.version>
         <cloudera-manager.version>7.8.1</cloudera-manager.version>
         <cloudera-manager-api-swagger.version>${cloudera-manager.version}</cloudera-manager-api-swagger.version>
-        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <commons-cli.version>1.4</commons-cli.version>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-compress.version>1.21</commons-compress.version>
+        <commons-compress.version>1.26.0</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-digester3.version>3.2</commons-digester3.version>
         <commons-io.version>2.8.0</commons-io.version>
@@ -220,13 +222,13 @@
         <glassfish-jaxb.version>2.3.3</glassfish-jaxb.version>
         <gson.version>2.8.9</gson.version>
         <groovy.version>3.0.7</groovy.version>
-        <guava.version>28.2-jre</guava.version>
-        <hadoop.version>3.3.6.3.3.6.1-SNAPSHOT</hadoop.version>
+        <guava.version>33.4.0-jre</guava.version>
+        <hadoop.version>3.3.6.3.3.6.2-1</hadoop.version>
         <hamcrest.version>2.2</hamcrest.version>
         <hamcrest-json.version>0.2</hamcrest-json.version>
         <httpclient.version>4.5.13</httpclient.version>
         <httpcore.version>4.4.14</httpcore.version>
-        <jackson.version>2.11.4</jackson.version>
+        <jackson.version>2.16.0</jackson.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
         <jansi.version>1.18</jansi.version>
         <javax.activation.version>1.2.0</javax.activation.version>
@@ -239,18 +241,21 @@
         <jaxws-ri.version>2.3.3</jaxws-ri.version>
         <jakarta.xml.bind.version>2.3.2</jakarta.xml.bind.version>
         <jakarta.activation.version>1.2.2</jakarta.activation.version>
+        <openssl-wildfly.version>1.5.4.Final</openssl-wildfly.version>
+        <snappy-java.version>1.1.10.4</snappy-java.version>
+        <reload4j.version>1.2.22</reload4j.version>
         <java-support.version>7.5.1</java-support.version>
         <javassist.version>3.27.0-GA</javassist.version>
         <jboss-logging.version>3.4.1.Final</jboss-logging.version>
         <jee-pac4j.version>5.0.0</jee-pac4j.version>
         <jericho-html.version>3.4</jericho-html.version>
         <jersey.version>2.6</jersey.version>
-        <jetty.version>9.4.48.v20220622</jetty.version>
+        <jetty.version>9.4.57.v20241219</jetty.version>
         <jline.version>2.14.6</jline.version>
         <jna.version>5.6.0</jna.version>
         <joda-time.version>2.10.8</joda-time.version>
         <json-path.version>2.5.0</json-path.version>
-        <json-smart.version>2.4.8</json-smart.version>
+        <json-smart.version>2.4.9</json-smart.version>
         <junit.version>4.13.2</junit.version>
         <lang-tag.version>1.5</lang-tag.version>
         <libpam4j.version>1.11</libpam4j.version>
@@ -260,30 +265,30 @@
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-pmd-plugin.version>3.12.0</maven-pmd-plugin.version>
-        <metrics.version>4.1.16</metrics.version>
-        <mina.version>2.0.22</mina.version>
+        <metrics.version>4.2.32</metrics.version>
+        <mina.version>2.0.27</mina.version>
         <mockito.version>4.8.1</mockito.version>
-        <netty.version>4.1.77.Final</netty.version>
+        <netty.version>4.1.118.Final</netty.version>
         <nimbus-jose-jwt.version>8.14.1</nimbus-jose-jwt.version>
         <nodejs.version>v14.15.0</nodejs.version>
         <okhttp.version>2.7.5</okhttp.version>
         <opensaml.version>3.4.5</opensaml.version>
         <pac4j.version>4.5.6</pac4j.version>
-        <postgresql.version>42.4.1</postgresql.version>
+        <postgresql.version>42.4.4</postgresql.version>
         <mysql.version>8.0.28</mysql.version>
-        <protobuf.version>3.16.3</protobuf.version>
+        <protobuf.version>3.25.5</protobuf.version>
         <powermock.version>2.0.9</powermock.version>
         <purejavacomm.version>0.0.11.1</purejavacomm.version>
         <pty4j.version>0.11.4</pty4j.version>
         <rest-assured.version>4.3.3</rest-assured.version>
-        <shiro.version>1.10.0</shiro.version>
+        <shiro.version>1.13.0</shiro.version>
         <shrinkwrap.version>1.2.6</shrinkwrap.version>
         <shrinkwrap.descriptors.version>2.0.0</shrinkwrap.descriptors.version>
         <slf4j.version>1.7.30</slf4j.version>
         <spotbugs.version>4.2.0</spotbugs.version>
         <spotbugs-maven-plugin.version>4.1.4</spotbugs-maven-plugin.version>
-        <spring.version>5.3.21</spring.version>
-        <spring-vault.version>2.3.2</spring-vault.version>
+        <spring.version>5.3.34</spring.version>
+        <spring-vault.version>2.3.3</spring-vault.version>
         <stax-ex.version>1.8.3</stax-ex.version>
         <stax2-api.version>4.2.1</stax2-api.version>
         <system-stubs-junit4.version>1.1.0</system-stubs-junit4.version>
@@ -294,11 +299,11 @@
         <txw2.version>2.4.0-b180830.0438</txw2.version>
         <velocity.version>2.3</velocity.version>
         <woodstox-core.version>6.4.0</woodstox-core.version>
-        <xmlsec.version>2.1.8</xmlsec.version>
+        <xmlsec.version>2.3.4</xmlsec.version>
         <xmltool.version>3.3</xmltool.version>
         <xml-jaxb.version>2.3.0</xml-jaxb.version>
         <xml-matchers.version>0.10</xml-matchers.version>
-        <zookeeper.version>3.8.4.3.3.6.1-SNAPSHOT</zookeeper.version>
+        <zookeeper.version>3.8.4.3.3.6.2-1</zookeeper.version>
     </properties>
     <repositories>
         <repository>
@@ -320,7 +325,7 @@
         <repository>
             <id>acceldata staging repo</id>
             <name>acceldata staging repo</name>
-            <url>https://repo1.acceldata.dev/repository/odp-staging-central/</url>
+            <url>https://repo1.acceldata.dev/repository/odp-central/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -1948,6 +1953,12 @@
                 <groupId>org.apache.directory.server</groupId>
                 <artifactId>apacheds-core</artifactId>
                 <version>${apacheds.directory.server.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.directory.server</groupId>
@@ -1973,6 +1984,12 @@
                 <groupId>org.apache.directory.server</groupId>
                 <artifactId>apacheds-protocol-ldap</artifactId>
                 <version>${apacheds.directory.server.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -2138,8 +2155,13 @@
 
             <dependency>
                 <groupId>org.bouncycastle</groupId>
-                <artifactId>bcprov-jdk15on</artifactId>
-                <version>${bcprov-jdk15on.version}</version>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bcprov-jdk18on.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk18on</artifactId>
+                <version>${bcpkix-jdk18on.version}</version>
             </dependency>
 
             <dependency>
@@ -2259,6 +2281,12 @@
                 <groupId>org.pac4j</groupId>
                 <artifactId>pac4j-cas</artifactId>
                 <version>${pac4j.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcpkix-jdk15on</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.pac4j</groupId>
@@ -2315,6 +2343,10 @@
                     <exclusion>
                         <groupId>dom4j</groupId>
                         <artifactId>dom4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk15on</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -2462,6 +2494,33 @@
                     <exclusion>
                         <groupId>com.google.errorprone</groupId>
                         <artifactId>error_prone_annotations</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker-maven-plugin.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.github.jnr</groupId>
+                        <artifactId>jnr-unixsocket</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.yaml</groupId>
+                        <artifactId>snakeyaml</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcpkix-jdk15on</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -2647,6 +2706,27 @@
                 <version>${system-stubs-junit4.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wildfly.common</groupId>
+                <artifactId>wildfly-common</artifactId>
+                <version>${openssl-wildfly.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>${snappy-java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.reload4j</groupId>
+                <artifactId>reload4j</artifactId>
+                <version>${reload4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>${jakarta.activation.version}</version>
+                <scope>runtime</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -2675,6 +2755,12 @@
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>${jakarta.activation.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>
