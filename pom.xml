@@ -1654,6 +1654,10 @@
                         <groupId>com.sun.jersey</groupId>
                         <artifactId>jersey-server</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.github.pjfanning</groupId>
+                        <artifactId>jersey-json</artifactId>
+                    </exclusion>
 
                     <exclusion>
                         <groupId>commons-cli</groupId>
@@ -2609,6 +2613,12 @@
                 <version>${system-stubs-junit4.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>${jakarta.activation.version}</version>
+                <scope>runtime</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -2637,6 +2647,12 @@
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>${jakarta.activation.version}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>
