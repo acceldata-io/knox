@@ -9,6 +9,7 @@
     <rule name="PINOT/inbound/ui-rootu" pattern="*://*:*/**/*/pinot">
         <rewrite template="{$serviceUrl[PINOT]}/"/>
     </rule>
+
     <!-- index.html -->
     <rule name="PINOT/inbound/ui-index" pattern="*://*:*/**/pinot/index.html">
         <rewrite template="{$serviceUrl[PINOT]}/index.html"/>
@@ -38,20 +39,25 @@
         <rewrite template="{$serviceUrl[PINOT]}/auth/info"/>
     </rule>
 
-    <!-- Pinot REST API Routes -->
-    <rule name="PINOT/api-tables-root" pattern="*://*:*/**/pinot/tables">
-        <rewrite template="{$serviceUrl[PINOT]}/tables"/>
-    </rule>
-    <!-- Tables with query parameters -->
+    <!-- CRITICAL FIX: Tables API - Query parameters MUST come before non-query rules -->
+    <!-- Tables with query parameters - HIGHER PRIORITY -->
     <rule name="PINOT/api-tables-with-params" pattern="*://*:*/**/pinot/tables?{**}">
         <rewrite template="{$serviceUrl[PINOT]}/tables?{**}"/>
     </rule>
-    <rule name="PINOT/api-tables-sub" pattern="*://*:*/**/pinot/tables/{**}">
-        <rewrite template="{$serviceUrl[PINOT]}/tables/{**}"/>
-    </rule>
-    <!-- Tables sub-paths with query parameters -->
+
+    <!-- Tables sub-paths with query parameters - HIGHER PRIORITY -->
     <rule name="PINOT/api-tables-sub-params" pattern="*://*:*/**/pinot/tables/{**}?{**}">
         <rewrite template="{$serviceUrl[PINOT]}/tables/{**}?{**}"/>
+    </rule>
+
+    <!-- Tables root without parameters - LOWER PRIORITY -->
+    <rule name="PINOT/api-tables-root" pattern="*://*:*/**/pinot/tables">
+        <rewrite template="{$serviceUrl[PINOT]}/tables"/>
+    </rule>
+
+    <!-- Tables sub-paths without parameters - LOWER PRIORITY -->
+    <rule name="PINOT/api-tables-sub" pattern="*://*:*/**/pinot/tables/{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/tables/{**}"/>
     </rule>
 
     <rule name="PINOT/api-tenants" pattern="*://*:*/**/pinot/tenants">
@@ -62,13 +68,28 @@
         <rewrite template="{$serviceUrl[PINOT]}/cluster/{**}"/>
     </rule>
 
+    <!-- Schemas with query parameters -->
+    <rule name="PINOT/api-schemas-with-params" pattern="*://*:*/**/pinot/schemas?{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/schemas?{**}"/>
+    </rule>
+
+    <rule name="PINOT/api-schemas" pattern="*://*:*/**/pinot/schemas">
+        <rewrite template="{$serviceUrl[PINOT]}/schemas"/>
+    </rule>
+
+    <rule name="PINOT/api-schemas-sub" pattern="*://*:*/**/pinot/schemas/{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/schemas/{**}"/>
+    </rule>
+
     <!-- ZooKeeper API calls -->
     <rule name="PINOT/zk-ls-root" pattern="*://*:*/**/pinot/zk/ls">
         <rewrite template="{$serviceUrl[PINOT]}/zk/ls"/>
     </rule>
+
     <rule name="PINOT/zk-ls-sub" pattern="*://*:*/**/pinot/zk/ls/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/zk/ls/{**}"/>
     </rule>
+
     <rule name="PINOT/zk-api" pattern="*://*:*/**/pinot/zk/ls?{path=**}?{**}">
         <rewrite template="{$serviceUrl[PINOT]}/zk/ls?{path=**}?{**}"/>
     </rule>
@@ -85,10 +106,6 @@
         <rewrite template="{$serviceUrl[PINOT]}/zk/stat?{path=**}"/>
     </rule>
 
-    <!-- Catch-all fallback -->
-    <rule name="PINOT/fallback" pattern="*://*:*/**/pinot/{**}">
-        <rewrite template="{$serviceUrl[PINOT]}/{**}"/>
-    </rule>
     <!-- Swagger UI Help Endpoint -->
     <rule name="PINOT/swagger-help" pattern="*://*:*/**/pinot/help">
         <rewrite template="{$serviceUrl[PINOT]}/help"/>
@@ -133,5 +150,9 @@
         <rewrite template="{$serviceUrl[PINOT]}/swaggerui-dist/swagger-ui-standalone-preset.js"/>
     </rule>
 
+    <!-- Catch-all fallback - MUST be last -->
+    <rule name="PINOT/fallback" pattern="*://*:*/**/pinot/{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/{**}"/>
+    </rule>
 
 </rules>
