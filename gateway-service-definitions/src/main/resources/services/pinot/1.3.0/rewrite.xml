@@ -42,8 +42,16 @@
     <rule name="PINOT/api-tables-root" pattern="*://*:*/**/pinot/tables">
         <rewrite template="{$serviceUrl[PINOT]}/tables"/>
     </rule>
+    <!-- Tables with query parameters -->
+    <rule name="PINOT/api-tables-with-params" pattern="*://*:*/**/pinot/tables?{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/tables?{**}"/>
+    </rule>
     <rule name="PINOT/api-tables-sub" pattern="*://*:*/**/pinot/tables/{**}">
         <rewrite template="{$serviceUrl[PINOT]}/tables/{**}"/>
+    </rule>
+    <!-- Tables sub-paths with query parameters -->
+    <rule name="PINOT/api-tables-sub-params" pattern="*://*:*/**/pinot/tables/{**}?{**}">
+        <rewrite template="{$serviceUrl[PINOT]}/tables/{**}?{**}"/>
     </rule>
 
     <rule name="PINOT/api-tenants" pattern="*://*:*/**/pinot/tenants">
