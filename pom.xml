@@ -2257,22 +2257,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.ehcache.integrations.shiro</groupId>
-                <artifactId>shiro-ehcache3</artifactId>
-                <version>${shiro-ehcache3.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.ehcache</groupId>
-                        <artifactId>ehcache</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.shiro</groupId>
-                        <artifactId>shiro-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
                 <groupId>org.kohsuke</groupId>
                 <artifactId>libpam4j</artifactId>
                 <version>${libpam4j.version}</version>
