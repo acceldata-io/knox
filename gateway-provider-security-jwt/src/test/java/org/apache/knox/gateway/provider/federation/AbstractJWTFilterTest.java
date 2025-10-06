@@ -33,6 +33,7 @@ import org.apache.knox.gateway.provider.federation.jwt.filter.SignatureVerificat
 import org.apache.knox.gateway.security.PrimaryPrincipal;
 import org.apache.knox.gateway.services.security.token.JWTokenAttributes;
 import org.apache.knox.gateway.services.security.token.JWTokenAuthority;
+import org.apache.knox.gateway.services.security.token.TokenServiceException;
 import org.apache.knox.gateway.services.security.token.impl.JWT;
 import org.apache.knox.gateway.services.security.token.impl.JWTToken;
 import org.apache.knox.gateway.util.X509CertificateUtil;
@@ -53,6 +54,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.AccessController;
 import java.security.KeyPair;
@@ -549,6 +551,8 @@ public abstract class AbstractJWTFilterTest  {
   @Test
   public void testInvalidVerificationPEM() throws Exception {
     try {
+
+
       Properties props = getProperties();
 
       KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
@@ -563,7 +567,12 @@ public abstract class AbstractJWTFilterTest  {
 
       props.put(getAudienceProperty(), "bar");
       props.put(getVerificationPemProperty(), failingPem);
-      handler.init(new TestFilterConfig(props));
+
+      /* Create a new handler that has different public key then the token signing key */
+      final AbstractJWTFilter handler_new = new TestJWTFederationFilter();
+      ((TestJWTFederationFilter) handler_new).setTokenService(new TestJWTokenAuthority(KPair.getPublic()));
+
+      handler_new.init(new TestFilterConfig(props));
 
       SignedJWT jwt = getJWT(AbstractJWTFilter.JWT_DEFAULT_ISSUER, "alice",
                              new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(10)), privateKey);
@@ -580,9 +589,119 @@ public abstract class AbstractJWTFilterTest  {
       EasyMock.replay(request, response);
 
       TestFilterChain chain = new TestFilterChain();
-      handler.doFilter(request, response, chain);
+      handler_new.doFilter(request, response, chain);
       Assert.assertFalse("doFilterCalled should not be true.", chain.doFilterCalled);
       Assert.assertNull("No Subject should be returned.", chain.subject);
+    } catch (ServletException se) {
+      fail("Should NOT have thrown a ServletException.");
+    }
+  }
+
+  /**
+   * This will test the signature verification chain in the following order
+   * 1. PEM - check if PEM is configured and signature is validated
+   * 2. JWKS - check if endpoint id configured if not skip
+   * 3. Knox signing key - if the above two fail try to validate using knox signing cert
+   * @throws Exception
+   */
+  @Test
+  public void testSignatureVerificationChain() throws Exception {
+    try {
+
+
+      Properties props = getProperties();
+
+      KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+      kpg.initialize(2048);
+
+      KeyPair KPair = kpg.generateKeyPair();
+      String dn = buildDistinguishedName(InetAddress.getLocalHost().getHostName());
+      Certificate cert = X509CertificateUtil.generateCertificate(dn, KPair, 365, "SHA1withRSA");
+      byte[] data = cert.getEncoded();
+      Base64 encoder = new Base64( 76, "\n".getBytes( StandardCharsets.US_ASCII ) );
+      String failingPem = new String(encoder.encodeToString( data ).getBytes( StandardCharsets.US_ASCII ), StandardCharsets.US_ASCII).trim();
+
+      props.put(getAudienceProperty(), "bar");
+      /* Add a failing PEM */
+      props.put(getVerificationPemProperty(), failingPem);
+
+      /* This handler is setup with a publicKey, corresponding privateKey is used to sign the JWT below */
+      handler.init(new TestFilterConfig(props));
+
+      SignedJWT jwt = getJWT(AbstractJWTFilter.JWT_DEFAULT_ISSUER, "alice",
+              new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(10)), privateKey);
+
+      HttpServletRequest request = EasyMock.createNiceMock(HttpServletRequest.class);
+      setTokenOnRequest(request, jwt);
+
+      EasyMock.expect(request.getRequestURL()).andReturn(new StringBuffer(SERVICE_URL)).anyTimes();
+      EasyMock.expect(request.getPathInfo()).andReturn("resource").anyTimes();
+      EasyMock.expect(request.getQueryString()).andReturn(null);
+      HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
+      EasyMock.expect(response.encodeRedirectURL(SERVICE_URL)).andReturn(SERVICE_URL);
+      EasyMock.expect(response.getOutputStream()).andAnswer(DummyServletOutputStream::new).anyTimes();
+      EasyMock.replay(request, response);
+
+      TestFilterChain chain = new TestFilterChain();
+      handler.doFilter(request, response, chain);
+      Assert.assertTrue("doFilterCalled should be true.", chain.doFilterCalled);
+
+      Set<PrimaryPrincipal> principals = chain.subject.getPrincipals(PrimaryPrincipal.class);
+      Assert.assertFalse("No PrimaryPrincipal", principals.isEmpty());
+      Assert.assertEquals("Not the expected principal", "alice", ((Principal)principals.toArray()[0]).getName());
+    } catch (ServletException se) {
+      fail("Should NOT have thrown a ServletException.");
+    }
+  }
+
+  /**
+   * This will test the signature verification chain.
+   * Specifically the flow when provided PEM is not invalid and
+   * knox signing key is valid.
+   *
+   * NOTE: here valid means can validate JWT.
+   * @throws Exception
+   */
+  @Test
+  public void testSignatureVerificationChainWithPEMandSignature() throws Exception {
+    try {
+      Properties props = getProperties();
+      KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+      kpg.initialize(2048);
+
+      KeyPair KPair = kpg.generateKeyPair();
+      String dn = buildDistinguishedName(InetAddress.getLocalHost().getHostName());
+      Certificate cert = X509CertificateUtil.generateCertificate(dn, KPair, 365, "SHA1withRSA");
+      byte[] data = cert.getEncoded();
+      Base64 encoder = new Base64( 76, "\n".getBytes( StandardCharsets.US_ASCII ) );
+      String failingPem = new String(encoder.encodeToString( data ).getBytes( StandardCharsets.US_ASCII ), StandardCharsets.US_ASCII).trim();
+
+      props.put(getAudienceProperty(), "bar");
+      props.put(getVerificationPemProperty(), failingPem);
+
+      handler.init(new TestFilterConfig(props));
+
+      SignedJWT jwt = getJWT(AbstractJWTFilter.JWT_DEFAULT_ISSUER, "alice",
+              new Date(new Date().getTime() + TimeUnit.MINUTES.toMillis(10)), privateKey);
+
+      HttpServletRequest request = EasyMock.createNiceMock(HttpServletRequest.class);
+      setTokenOnRequest(request, jwt);
+
+      EasyMock.expect(request.getRequestURL()).andReturn(new StringBuffer(SERVICE_URL)).anyTimes();
+      EasyMock.expect(request.getPathInfo()).andReturn("resource").anyTimes();
+      EasyMock.expect(request.getQueryString()).andReturn(null);
+      HttpServletResponse response = EasyMock.createNiceMock(HttpServletResponse.class);
+      EasyMock.expect(response.encodeRedirectURL(SERVICE_URL)).andReturn(SERVICE_URL);
+      EasyMock.expect(response.getOutputStream()).andAnswer(DummyServletOutputStream::new).anyTimes();
+      EasyMock.replay(request, response);
+
+      TestFilterChain chain = new TestFilterChain();
+      handler.doFilter(request, response, chain);
+
+      Set<PrimaryPrincipal> principals = chain.subject.getPrincipals(PrimaryPrincipal.class);
+      Assert.assertFalse("No PrimaryPrincipal", principals.isEmpty());
+      Assert.assertEquals("Not the expected principal", "alice", ((Principal)principals.toArray()[0]).getName());
+
     } catch (ServletException se) {
       fail("Should NOT have thrown a ServletException.");
     }
@@ -1060,6 +1179,11 @@ public abstract class AbstractJWTFilterTest  {
     @Override
     public boolean verifyToken(JWT token, String jwksurl, String algorithm, Set<JOSEObjectType> allowedJwsTypes) {
      return false;
+    }
+
+    @Override
+    public boolean verifyToken(JWT token, Set<URI> jwksurls, String algorithm, Set<JOSEObjectType> allowedJwsTypes) throws TokenServiceException {
+      return false;
     }
   }
 

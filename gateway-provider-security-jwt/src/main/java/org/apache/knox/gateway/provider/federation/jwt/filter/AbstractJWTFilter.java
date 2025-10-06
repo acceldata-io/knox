@@ -20,6 +20,7 @@ package org.apache.knox.gateway.provider.federation.jwt.filter;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
+import java.net.URI;
 import java.security.Principal;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -44,6 +45,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.knox.gateway.audit.api.Action;
 import org.apache.knox.gateway.audit.api.ActionOutcome;
 import org.apache.knox.gateway.audit.api.AuditContext;
@@ -106,7 +108,7 @@ public abstract class AbstractJWTFilter implements Filter {
   private String expectedIssuer;
   private String expectedSigAlg;
   protected String expectedPrincipalClaim;
-  protected String expectedJWKSUrl;
+  protected Set<URI> expectedJWKSUrls = new HashSet();
   protected Set<JOSEObjectType> allowedJwsTypes;
 
   private TokenStateService tokenStateService;
@@ -156,6 +158,9 @@ public abstract class AbstractJWTFilter implements Filter {
     }
 
     expectedSigAlg = filterConfig.getInitParameter(JWT_EXPECTED_SIGALG);
+    if(StringUtils.isBlank(expectedSigAlg)) {
+      expectedSigAlg = JWT_DEFAULT_SIGALG;
+    }
   }
 
   protected List<String> parseExpectedAudiences(String expectedAudiences) {
@@ -455,10 +460,17 @@ public abstract class AbstractJWTFilter implements Filter {
       try {
         if (publicKey != null) {
           verified = authority.verifyToken(token, publicKey);
-        } else if (expectedJWKSUrl != null) {
-          verified = authority.verifyToken(token, expectedJWKSUrl, expectedSigAlg, allowedJwsTypes);
-        } else {
+          log.pemVerificationResultMessage(verified);
+        }
+
+        if (!verified && expectedJWKSUrls != null && !expectedJWKSUrls.isEmpty()) {
+          verified = authority.verifyToken(token, expectedJWKSUrls, expectedSigAlg, allowedJwsTypes);
+          log.jwksVerificationResultMessage(verified);
+        }
+
+        if(!verified) {
           verified = authority.verifyToken(token);
+          log.signingKeyVerificationResultMessage(verified);
         }
       } catch (TokenServiceException e) {
         log.unableToVerifyToken(e);
