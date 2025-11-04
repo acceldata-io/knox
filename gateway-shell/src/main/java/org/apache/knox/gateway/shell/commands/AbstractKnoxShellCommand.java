@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.apache.knox.gateway.shell.CredentialCollectionException;
 import org.apache.knox.gateway.shell.CredentialCollector;
-import org.codehaus.groovy.tools.shell.CommandSupport;
+import org.apache.groovy.groovysh.CommandSupport;
 import org.apache.groovy.groovysh.Groovysh;
 
 public abstract class AbstractKnoxShellCommand extends CommandSupport {
