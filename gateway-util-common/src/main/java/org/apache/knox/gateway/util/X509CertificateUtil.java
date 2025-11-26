@@ -141,9 +141,12 @@ public class X509CertificateUtil {
       methodSET.invoke(certInfoObject, getSetField(certInfoObject, "VERSION"),
           certificateVersionObject);
 
-      // AlgorithmId algo = new AlgorithmId(AlgorithmId.md5WithRSAEncryption_oid);
       Class<?> algorithmIdClass = Class.forName(getAlgorithmIdModuleName());
-      Field md5WithRSAField = algorithmIdClass.getDeclaredField("md5WithRSAEncryption_oid");
+      String version = System.getProperty("java.version");
+      boolean isJava8 = version.startsWith("1.8");
+      String fieldName = isJava8 ? "md5WithRSAEncryption_oid" : "RSAEncryption_oid";
+
+      Field md5WithRSAField = algorithmIdClass.getDeclaredField(fieldName);
       md5WithRSAField.setAccessible(true);
       Class<?> objectIdentifierClass = Class.forName(getObjectIdentifierModuleName());
 
