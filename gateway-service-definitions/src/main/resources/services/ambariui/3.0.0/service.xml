@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<service role="AMBARIUI" name="ambariui" version="2.2.0">
+<service role="AMBARIUI" name="ambariui" version="3.0.0">
     <metadata>
         <type>UI</type>
         <context>/ambari/</context>
