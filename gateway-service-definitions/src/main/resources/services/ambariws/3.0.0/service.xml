@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<service role="AMBARIWS" name="ambariws" version="2.2.0">
+<service role="AMBARIWS" name="ambariws" version="3.0.0">
     <policies>
         <policy role="webappsec"/>
         <policy role="authentication" name="Anonymous"/>

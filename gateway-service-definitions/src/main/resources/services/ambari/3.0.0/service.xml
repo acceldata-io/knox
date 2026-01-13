@@ -14,7 +14,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<service role="AMBARI" name="ambari" version="2.2.0">
+<service role="AMBARI" name="ambari" version="3.0.0">
     <metadata>
         <type>API</type>
         <context>/ambari/api</context>
