@@ -42,6 +42,9 @@
         <route path="/ambari/**/app.js">
             <rewrite apply="AMBARIUI/ambari/outbound/links" to="response.body"/>
         </route>
+        <route path="/ambari/**/vendor.js">
+            <rewrite apply="AMBARIUI/ambari/outbound/links" to="response.body"/>
+        </route>
 
         <!-- Admin View route -->
         <route path="/ambari/views/ADMIN_VIEW/**/INSTANCE/**/main.js">
