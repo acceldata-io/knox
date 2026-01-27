@@ -27,7 +27,7 @@
 
     <groupId>org.apache.knox</groupId>
     <artifactId>gateway</artifactId>
-    <version>2.0.0.3.3.6.2-SNAPSHOT</version>
+    <version>2.0.0.3.3.6.3-1</version>
     <packaging>pom</packaging>
 
     <name>gateway</name>
@@ -178,7 +178,7 @@
         <apacheds-jdbm.version>2.0.0-M5</apacheds-jdbm.version>
         <apache-rat-plugin.version>0.13</apache-rat-plugin.version>
         <ant-nodeps.version>1.8.1</ant-nodeps.version>
-        <asm.version>9.0</asm.version>
+        <asm.version>9.5</asm.version>
         <aspectj.version>1.9.6</aspectj.version>
         <asynchttpclient.version>4.1.5</asynchttpclient.version>
         <bcprov-jdk18on.version>1.78</bcprov-jdk18on.version>
@@ -223,7 +223,7 @@
         <gson.version>2.8.9</gson.version>
         <groovy.version>3.0.7</groovy.version>
         <guava.version>33.4.0-jre</guava.version>
-        <hadoop.version>3.3.6.3.3.6.2-SNAPSHOT</hadoop.version>
+        <hadoop.version>3.3.6.3.3.6.3-1</hadoop.version>
         <hamcrest.version>2.2</hamcrest.version>
         <hamcrest-json.version>0.2</hamcrest-json.version>
         <httpclient.version>4.5.13</httpclient.version>
@@ -239,7 +239,7 @@
         <javax.ws.rs-api.version>2.0</javax.ws.rs-api.version>
         <javax.websocket-api.version>1.1</javax.websocket-api.version>
         <jaxws-ri.version>2.3.3</jaxws-ri.version>
-        <jakarta.xml.bind.version>2.3.2</jakarta.xml.bind.version>
+        <jakarta.xml.bind.version>2.3.3</jakarta.xml.bind.version>
         <jakarta.activation.version>1.2.2</jakarta.activation.version>
         <openssl-wildfly.version>1.5.4.Final</openssl-wildfly.version>
         <snappy-java.version>1.1.10.4</snappy-java.version>
@@ -279,6 +279,7 @@
         <protobuf.version>3.25.5</protobuf.version>
         <powermock.version>2.0.9</powermock.version>
         <purejavacomm.version>0.0.11.1</purejavacomm.version>
+        <!-- After JDK 11 we can use 0.12.4 from maven central -->
         <pty4j.version>0.11.4</pty4j.version>
         <rest-assured.version>4.3.3</rest-assured.version>
         <shiro.version>1.13.0</shiro.version>
@@ -303,13 +304,13 @@
         <xmltool.version>3.3</xmltool.version>
         <xml-jaxb.version>2.3.0</xml-jaxb.version>
         <xml-matchers.version>0.10</xml-matchers.version>
-        <zookeeper.version>3.8.4.3.3.6.2-SNAPSHOT</zookeeper.version>
+        <zookeeper.version>3.8.4.3.3.6.3-1</zookeeper.version>
     </properties>
     <repositories>
         <repository>
-            <id>jcenter</id>
-            <name>jcenter</name>
-            <url>https://jcenter.bintray.com</url>
+            <id>jetbrains-pty4j</id>
+            <name>jetbrains-intellij-dependencies</name>
+            <url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies</url>
     </repository>
     <repository>
             <id>acceldata repo</id>
@@ -565,6 +566,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <!-- For JDK 17 builds uncomment the following lines, make sure to remove space between - - (double dash) -->
+
+                    <argLine>@{argLine} --add-exports java.base/sun.security.x509=ALL-UNNAMED --add-exports java.base/sun.security.pkcs=ALL-UNNAMED --add-exports java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-opens java.base/sun.security.util=ALL-UNNAMED</argLine>
+
                     <excludedGroups>
                         org.apache.knox.test.category.SlowTests,org.apache.knox.test.category.ManualTests,org.apache.knox.test.category.VerifyTest,org.apache.knox.test.category.ReleaseTest
                     </excludedGroups>
@@ -615,6 +620,11 @@
                                 <requireJavaVersion>
                                     <version>[1.8,)</version>
                                 </requireJavaVersion>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>log4j:log4j</exclude>
+                                    </excludes>
+                                </bannedDependencies>
                             </rules>
                         </configuration>
                     </execution>
@@ -1441,22 +1451,6 @@
                 <groupId>com.sun.activation</groupId>
                 <artifactId>javax.activation</artifactId>
                 <version>${javax.activation.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${xml-jaxb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-core</artifactId>
-                <version>${xml-jaxb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>${xml-jaxb.version}</version>
             </dependency>
 
             <dependency>
