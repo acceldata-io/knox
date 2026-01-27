@@ -15,7 +15,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-<service role="SOLR" name="solr" version="8.11.3`">
+<service role="SOLR" name="solr" version="8.11.3">
     <metadata>
         <type>API_AND_UI</type>
         <context>/solr/</context>
