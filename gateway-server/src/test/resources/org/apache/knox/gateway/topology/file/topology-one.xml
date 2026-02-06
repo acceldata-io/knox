@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<topology>
+    <!--
+    <version>1.2.3</version>
+    <security></security>
+    -->
+    <service>
+        <role>WEBHDFS</role>
+        <url>http://host-one:80/webhdfs</url>
+    </service>
+</topology>

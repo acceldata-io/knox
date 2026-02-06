@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>zip</format>
+        <format>tar.gz</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>home</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+            <excludes>
+                <exclude>**/*.sh</exclude>
+                <exclude>**/.idea/**</exclude>
+                <exclude>**/*.iml</exclude>
+                <exclude>**/.project</exclude>
+                <exclude>**/.settings/**</exclude>
+            </excludes>
+            <fileMode>0644</fileMode>
+            <directoryMode>0744</directoryMode>
+        </fileSet>
+        <fileSet>
+            <directory>home</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>**/*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/home/bin/</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>..</directory>
+            <outputDirectory></outputDirectory>
+            <includes>
+                <include>CHANGES</include>
+                <include>ISSUES</include>
+                <include>LICENSE</include>
+                <include>NOTICE</include>
+                <include>README</include>
+            </includes>
+            <fileMode>0444</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/services/</directory>
+            <outputDirectory>data/services</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/samples/</directory>
+            <outputDirectory>samples</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.build.directory}/applications</directory>
+            <outputDirectory>data/applications</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <excludes>
+                <exclude>**/*.bundle.map</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>dep</outputDirectory>
+            <!--
+            <useTransitiveFiltering>true</useTransitiveFiltering>
+            -->
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>org.apache.knox:gateway-*</exclude>
+                <exclude>org.apache.knox:hadoop-examples</exclude>
+            </excludes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>org.apache.knox:gateway-*</include>
+                <!-- include>org.apache.knox:gateway-release-*</include -->
+            </includes>
+            <excludes>
+                <exclude>org.apache.knox:gateway-util-launcher</exclude>
+                <exclude>org.apache.knox:gateway-server-launcher</exclude>
+                <exclude>org.apache.knox:gateway-shell-launcher</exclude>
+                <exclude>org.apache.knox:gateway-demo-ldap-launcher</exclude>
+                <exclude>org.apache.knox:gateway-applications</exclude>
+            </excludes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <outputFileNameMapping>knoxcli.jar</outputFileNameMapping>
+            <includes>
+                <include>org.apache.knox:knox-cli-launcher</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <outputFileNameMapping>gateway.jar</outputFileNameMapping>
+            <includes>
+                <include>org.apache.knox:gateway-server-launcher</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <outputFileNameMapping>shell.jar</outputFileNameMapping>
+            <includes>
+                <include>org.apache.knox:gateway-shell-launcher</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>bin</outputDirectory>
+            <outputFileNameMapping>ldap.jar</outputFileNameMapping>
+            <includes>
+                <include>org.apache.knox:gateway-demo-ldap-launcher</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>samples</outputDirectory>
+            <outputFileNameMapping>hadoop-examples.jar</outputFileNameMapping>
+            <includes>
+                <include>org.apache.knox:hadoop-examples</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+</assembly>

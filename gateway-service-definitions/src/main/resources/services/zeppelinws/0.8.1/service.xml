@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<service role="ZEPPELINWS" name="zeppelinws" version="0.8.1">
+    <metadata>
+        <type>API</type>
+        <context>/zeppelin/ws</context>
+        <shortDesc>Zeppelin WS API</shortDesc>
+        <description>Apache Zeppelin is a web-based notebook that enables data-driven, interactive data analytics and collaborative documents with SQL, Scala and more.</description>
+        <samples>
+            <sample>
+                <description>Fetch the available notebooks on your server</description>
+                <method>GET</method>
+                <path>api/notebook</path>
+            </sample>
+            <sample>
+                <description>Fetch the status of all paragraphs by the given note id (e.g. 'note1')</description>
+                <method>GET</method>
+                <path>api/notebook/job/note1</path>
+            </sample>
+            <sample>
+                <description>Delete a note by the given note id (e.g. 'note1')</description>
+                <method>DELETE</method>
+                <path>api/notebook/note1</path>
+            </sample>
+            <sample>
+                <description>You may check out Apache Zeppelin WS's REST API documentation here</description>
+                <value>http://zeppelin.apache.org/docs/0.8.1/usage/rest_api/notebook.html</value>
+            </sample>
+        </samples>
+    </metadata>
+  <routes>
+    <route path="/zeppelin/ws">
+      <rewrite apply="ZEPPELINWS/zeppelin/ws/inbound" to="request.url"/>
+    </route>
+
+    <route path="/zeppelin/ws**">
+      <rewrite apply="ZEPPELINWS/zeppelin/inbound" to="request.url"/>
+    </route>
+  </routes>
+</service>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<rules>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/rootAppScript" pattern="*://*:*/**/yarnuiv2/">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/stacks" pattern="*://*:*/**/yarnuiv2/logs/stacks">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/stacks"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/static" pattern="*://*:*/**/yarnuiv2/static/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/static/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/redirect" pattern="*://*:*/**/yarnuiv2/redirect">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/index.html"/>
+  </rule> 
+ 
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/node" pattern="*://*:*/**/yarnuiv2/node?{host}&amp;{port=**}">
+    <rewrite template="{$serviceScheme[YARNUIV2]}://{host}:{port=**}"/>
+  </rule> 
+ 
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/timeline" pattern="*://*:*/**/yarnuiv2/timeline?{host}&amp;{port=**}?{**}">
+    <rewrite template="{$serviceScheme[YARNUIV2]}://{host}:{port=**}?{**}"/>
+  </rule> 
+ 
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/logs" pattern="*://*:*/**/yarnuiv2/logs/?{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/logs/?{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/path" pattern="*://*:*/**/yarnuiv2/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/query" pattern="*://*:*/**/yarnuiv2/{**}?{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/{**}?{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/ws" pattern="*://*:*/**/yarnuiv2/ws/{**}?{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ws/{**}?{**}"/>
+  </rule>
+ 
+  <!-- Resources -->
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/styles" pattern="*://*:*/**/yarnuiv2/styles/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/styles/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/scripts" pattern="*://*:*/**/yarnuiv2/scripts/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/scripts/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/extensions" pattern="*://*:*/**/yarnuiv2/extensions/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/extensions/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/jax" pattern="*://*:*/**/yarnuiv2/jax/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/jax/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/components" pattern="*://*:*/**/yarnuiv2/components/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/components/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/assets" pattern="*://*:*/**/yarnuiv2/assets/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/assets/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/fonts" pattern="*://*:*/**/yarnuiv2/fonts/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/fonts/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/config" pattern="*://*:*/**/yarnuiv2/config/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/ui2/config/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/sitepath">
+    <rewrite template="{$frontend[path]}/yarnuiv2"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/css" pattern="styles/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/styles/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/assets/styles" pattern="assets/styles/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/assets/styles/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/assets" pattern="assets/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/assets/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/config" pattern="config/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/config/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/javascript" pattern="scripts/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/scripts/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/javascript" pattern="extensions/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/extensions/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/javascript" pattern="jax/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/jax/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/javascript" pattern="components/{**}">
+    <rewrite template="{$frontend[path]}/yarnuiv2/components/{**}"/>
+  </rule>  
+  
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/logohref">
+    <rewrite template="ui2/#/cluster-overview"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/nodeaddress">
+    <match pattern="{host}:{port}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/node?{host}?{port}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/outbound/timeline">
+    <match pattern="{host}:{port}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/timeline?{host}?{port}"/>
+  </rule>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/links">
+    <content type="*/x-javascript">
+      <apply path="ui2/#/cluster-overview" rule="YARNUIV2/yarnuiv2/outbound/logohref"/>
+    </content>
+    <content type="application/javascript">
+      <apply path="ui2/#/cluster-overview" rule="YARNUIV2/yarnuiv2/outbound/logohref"/>
+    </content>
+    <content type="*/html">
+    </content>
+  </filter>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/mainpage">
+    <content type="*/json">
+      <apply path="$.nodes.node[*].nodeHTTPAddress" rule="YARNUIV2/yarnuiv2/nodeaddress"/>
+      <apply path="$.appAttempts.appAttempt[*].nodeHttpAddress" rule="YARNUIV2/yarnuiv2/nodeaddress"/>
+    </content>
+  </filter>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/query">
+    <content type="*/json">
+      <apply path="$.property.value" rule="YARNUIV2/yarnuiv2/outbound/timeline"/>
+    </content>
+  </filter>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/static" pattern="/static/{**}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/static/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/conf" pattern="/conf">
+    <rewrite template="{$frontend[url]}/yarnuiv2/conf"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/stacks" pattern="/stacks">
+    <rewrite template="{$frontend[url]}/yarnuiv2/stacks"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/metrics" pattern="/metrics">
+    <rewrite template="{$frontend[url]}/yarnuiv2/metrics"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/jmx" pattern="/jmx?{**}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/jmx?{**}"/>
+  </rule>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/apps">
+    <content type="*/html">
+      <apply path="(https?://[^/':,]+:[\d]+)?/proxy/[^']*" rule="YARNUIV2/yarnuiv2/outbound/apps/history"/>
+      <apply path="(https?:)?//[^/':,]+:[\d]+/node/containerlogs/container(_[^/':,]+)+/[^/':,]+" rule="YARNUIV2/yarnuiv2/outbound/node/containerlogs"/>
+      <apply path="https?://[^/':,]+:[\d]+/cluster/scheduler.*" rule="YARNUIV2/yarnuiv2/outbound/scheduler1"/>
+      <apply path="https?://[^/':,]+:[\d]+/cluster/apps.*" rule="YARNUIV2/yarnuiv2/outbound/clusterapps"/>
+      <apply path="https?://[^/':,]+:[\d]+/cluster/cluster.*" rule="YARNUIV2/yarnuiv2/outbound/cluster"/>
+      <apply path="https?://[^/':,]+:[\d]+/cluster/app.*" rule="YARNUIV2/yarnuiv2/outbound/cluster/apps"/>
+      <apply path="https?://[^/':,]+:[\d][^']*" rule="YARNUIV2/yarnuiv2/outbound/node2"/>
+      <apply path="/cluster/[^']*" rule="YARNUIV2/yarnuiv2/outbound/cluster/common"/>
+    </content>
+    <content type="*/json">
+    </content>
+  </filter>
+
+  <rule flow="OR" dir="OUT" name="YARNUIV2/yarnuiv2/outbound/cluster/common">
+    <match pattern="/cluster/appattempt/{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/cluster/appattempt/{**}"/>
+    </match>
+    <match pattern="/cluster/scheduler?{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/cluster/scheduler?{**}"/>
+    </match>
+    <match pattern="/cluster/container/{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/cluster/container/{**}"/>
+    </match>
+    <match pattern="/cluster/{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/cluster/{**}"/>
+    </match>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/scheduler1">
+    <match pattern="*://*:*/cluster/scheduler?{**}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/cluster/scheduler?{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/clusterapps">
+    <match pattern="*://*:*/cluster/apps?{**}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/cluster/apps?{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/cluster">
+    <match pattern="*://*:*/cluster/cluster?{**}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/cluster/cluster?{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/node2">
+    <match pattern="{scheme}://{host}:{port}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/nodemanager/node?{scheme}?{host}?{port}"/>
+  </rule>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/filter/nodes">
+    <content type="*/html">
+      <apply path="(?!http:)//[^/':,]+:[\d]+" rule="YARNUIV2/yarnuiv2/outbound/node3"/>
+    </content>
+  </filter>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/node3">
+    <match pattern="//{host}:{port}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/nodemanager/node?scheme=http?{host}?{port}"/>
+  </rule>
+
+  <rule flow="OR" dir="OUT" name="YARNUIV2/yarnuiv2/outbound/apps/history">
+    <match pattern="*://*:*/proxy/{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/proxy/{**}/?{**}"/>
+    </match>
+    <match pattern="/proxy/{**}?{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/proxy/{**}/?{**}"/>
+    </match>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/proxy" pattern="*://*:*/**/yarnuiv2/proxy/{**}?{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/proxy/{**}?{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/proxy" pattern="*://*:*/proxy/{**}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/proxy/{**}/"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/cluster/apps" pattern="*://*:*/cluster/app/{**}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/cluster/app/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/node/containerlogs">
+    <match pattern="{scheme}://{host}:{port}/node/containerlogs/{**}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/node/containerlogs/{**}?{scheme}?host={$hostmap(host)}?{port}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/node/containerlogs2" pattern="*://*:*/node/containerlogs/{**}?{**}">
+    <match pattern="{scheme}://{host}:{port}/node/containerlogs/{**}?{**}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/node/containerlogs/{**}?{**}?{scheme}?{host}?{port}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/containerlogs1" pattern="*://*:*/**/yarnuiv2/node/containerlogs/{**}?{**}?{scheme}?{host}?{port}">
+    <rewrite template="{scheme}://{host}:{port}/node/containerlogs/{**}?{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/containerlogs" pattern="*://*:*/**/yarnuiv2/node/containerlogs/{**}?{scheme}?{host}?{port}">
+    <rewrite template="{scheme}://{host}:{port}/node/containerlogs/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/node4" pattern="/node/containerlogs/{**}?{start}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/node/containerlogs/{**}?{start}?scheme={$inboundurl[scheme]}?host={$inboundurl[host]}?port={$inboundurl[port]}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/logs" pattern="/logs">
+    <rewrite template="{$frontend[url]}/yarnuiv2/logs"/>
+  </rule>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/filter/logs1">
+    <content type="*/html">
+      <apply path="/logs/[^']*" rule="YARNUIV2/yarnuiv2/outbound/logs1"/>
+    </content>
+  </filter>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/logs1">
+    <match pattern="/logs/{**}" />
+    <rewrite template="{$frontend[url]}/yarnuiv2/logs/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/nodelogs" pattern="*://*:*/**/yarnuiv2/logs?{scheme}?{host}?{port}?{**}">
+    <rewrite template="{scheme}://{host}:{port}/logs/?{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/headers/logs/location">
+    <match pattern="{scheme}://{host}:{port}/logs/?{**}"/>
+    <rewrite template="{$frontend[url]}/yarnuiv2/logs?{scheme}?host={$hostmap(host)}?{port}?{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/logs/files" pattern="*://*:*/**/yarnuiv2/logs/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/logs/{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/nodelink" pattern="{scheme}://{host}:{port}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/node" pattern="/node/{**}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/nodemanager/node/{**}?scheme={$inboundurl[scheme]}?host={$inboundurl[host]}?port={$inboundurl[port]}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/nodemanager1" pattern="*://*:*/**/yarnuiv2/nodemanager/node?{scheme}?{host}?{port}">
+    <rewrite template="{scheme}://{host}:{port}/node"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/nodemanager2" pattern="*://*:*/**/yarnuiv2/nodemanager/node/{**}?{scheme}?{host}?{port}">
+    <rewrite template="{scheme}://{host}:{port}/node/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/cluster" pattern="*://*:*/**/yarnuiv2/cluster/{**}">
+    <rewrite template="{$serviceUrl[YARNUIV2]}/cluster/{**}"/>
+  </rule>
+
+  <rule dir="IN" name="YARNUIV2/yarnuiv2/inbound/nodemanager" pattern="*://*:*/**/yarnuiv2/nodes/{**}?{**}?{scheme}?{host}?{port}">
+    <rewrite template="{scheme}://{host}:{port}/ws/v1/node/{**}?{**}"/>
+  </rule>
+
+  <rule dir="OUT" name="YARNUIV2/yarnuiv2/outbound/nodemanager" pattern="{scheme}://{host}:{port}/ws/v1/node/{**}?{**}">
+    <rewrite template="{$frontend[url]}/yarnuiv2/nodes/{**}?{**}?{scheme}?{host}?{port}"/>
+  </rule>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/headers/jobhistory/job">
+    <content type="application/x-http-headers">
+      <apply path="Location" rule="YARNUIV2/yarnuiv2/outbound/headers/jobhistory/job/location"/>
+    </content>
+  </filter>
+
+  <rule flow="OR" dir="OUT" name="YARNUIV2/yarnuiv2/outbound/headers/jobhistory/job/location">
+    <match pattern="{scheme}://{host}:{port}/{gateway}/{knoxsso}/{api}/{v}/websso?originalUrl={**}">
+      <rewrite template="{scheme}://{host}:{port}/{gateway}/{knoxsso}/{api}/{v}/websso?originalUrl={$postfix[url,/yarnuiv2/]}"/>
+    </match>
+    <match pattern="{scheme}://{host}:{port}/ui2/index.html">
+      <rewrite template="{$frontend[url]}/yarnuiv2/redirect"/>
+    </match>
+    <match pattern="{scheme}://{host}:{port}/jobhistory/logs/{**}">
+      <rewrite template="{$frontend[url]}/jobhistory/joblogs/{**}?{scheme}?{host}?{port}"/>
+    </match>
+    <match pattern="{scheme}://{host}:{port}/jobhistory/{**}">
+      <rewrite template="{$frontend[url]}/jobhistory/{**}?{scheme}?{host}?{port}"/>
+    </match>
+    <match pattern="*://*:*/history/{**}?{**}">
+      <rewrite template="{$frontend[url]}/sparkhistory/history/{**}?{**}"/>
+    </match>
+    <match pattern="*://*:*/cluster/app/{**}">
+      <rewrite template="{$frontend[url]}/yarnuiv2/cluster/app/{**}"/>
+    </match>
+  </rule>
+
+  <rule flow="OR" dir="OUT" name="YARNUIV2/yarnuiv2/outbound/headers/index/location">
+    <match pattern="{scheme}://{host}:{port}/{gateway}/{knoxsso}/{api}/{v}/websso?originalUrl={**}">
+      <rewrite template="{scheme}://{host}:{port}/{gateway}/{knoxsso}/{api}/{v}/websso?originalUrl={$postfix[url,/yarnuiv2/]}"/>
+    </match>
+    <match pattern="{scheme}://{host}:{port}/ui2/index.html">
+      <rewrite template="{$frontend[url]}/yarnuiv2/redirect"/>
+    </match>
+  </rule>
+
+  <filter name="YARNUIV2/yarnuiv2/outbound/headers/location">
+    <content type="application/x-http-headers">
+      <apply path="Location" rule="YARNUIV2/yarnuiv2/outbound/headers/index/location"/>
+    </content>
+  </filter>
+ </rules>

@@ -1,0 +1,50 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<service role="DRUID-OVERLORD" name="druid-overlord" version="0.0.1">
+    <metadata>
+        <type>API</type>
+        <context>/druid-overlord</context>
+        <shortDesc>Druid Overlord API</shortDesc>
+        <description>The Overlord process is responsible for accepting tasks, coordinating task distribution, creating locks around tasks, and returning statuses to callers. 
+            Overlord can be configured to run in one of two modes - local or remote (local being default).</description>
+        <samples>
+            <sample>
+                <description>Fetch the current leader Overlord of the cluster. If you have multiple Overlords, just one is leading at any given time. The others are on standby</description>
+                <method>GET</method>
+                <path>druid/indexer/v1/leader</path>
+            </sample>
+             <sample>
+                <description>Fetch a list of ALL tasks</description>
+                <method>GET</method>
+                <path>druid/indexer/v1/tasks</path>
+            </sample>
+            <sample>
+                <description>You may check out Apache Druid Overlord's REST API documentation here</description>
+                <value>https://druid.apache.org/docs/latest/operations/api-reference.html#overlord</value>
+            </sample>
+        </samples>
+    </metadata>
+  <routes>
+    <route path="druid-overlord/druid/indexer/v1/{**}?{**}">
+        <rewrite apply="DRUID-OVERLORD/druid-overlord/inbound/api"/>
+    </route>
+    <route path="druid-overlord/status">
+      <rewrite apply="DRUID-OVERLORD/druid-overlord/inbound/status"/>
+    </route>
+  </routes>
+</service>
+

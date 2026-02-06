@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<service role="DATANODE" name="datanode" version="1.0.0">
+    <metadata>
+        <type>API</type>
+        <context>/datanode</context>
+        <shortDesc>Datanode</shortDesc>
+        <description>DataNode works as Slave in Hadoop cluster. This actually stores Business data. This is actual worker node were Read/Write/Data processing is handled. Upon instruction from Master, it performs creation/replication/deletion of data blocks.</description>
+    </metadata>
+    <routes>
+        <route path="/datanode/">
+           <rewrite apply="DATANODE/outbound/datanode/static" to="response.body"/>
+        </route>
+        <route path="/datanode/**">
+           <rewrite apply="DATANODE/outbound/datanode/static" to="response.body"/>
+        </route>
+        <route path="/datanode/**?**">
+           <rewrite apply="DATANODE/outbound/datanode/static" to="response.body"/>
+        </route>
+        <route path="/datanode/?**"/>
+    </routes>
+    <dispatch classname="org.apache.knox.gateway.dispatch.URLDecodingDispatch"/>
+</service>

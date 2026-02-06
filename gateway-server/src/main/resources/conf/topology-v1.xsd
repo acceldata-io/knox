@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<h:schema xmlns:h="http://www.w3.org/2001/XMLSchema">
+    <h:element name="topology">
+        <h:complexType>
+            <h:sequence maxOccurs="1">
+
+                <h:element name="name" minOccurs="0" maxOccurs="1"/>
+                <h:element name="path" minOccurs="0" maxOccurs="1"/>
+                <h:element name="generated" type="h:boolean" minOccurs="0"/>
+
+                <h:element name="gateway" minOccurs="0" maxOccurs="1">
+                    <h:complexType>
+                        <h:choice minOccurs="1" maxOccurs="unbounded">
+
+                            <h:element name="provider" maxOccurs="unbounded">
+                                <h:complexType>
+                                    <h:sequence>
+                                        <h:element name="role" type="h:string" minOccurs="1" maxOccurs="1"/>
+                                        <h:element name="name" type="h:string" minOccurs="1" maxOccurs="1"/>
+                                        <h:element name="enabled" type="h:boolean" minOccurs="1" maxOccurs="1"/>
+
+                                        <h:element name="param" minOccurs="0" maxOccurs="unbounded">
+                                            <h:complexType>
+                                                <h:sequence minOccurs="0">
+                                                    <h:element name="name" type="h:string" />
+                                                    <h:element name="value" type="h:string" />
+                                                </h:sequence>
+                                                <h:attribute name="name" type="h:string" use="optional" />
+                                                <h:attribute name="value" type="h:string" use="optional" />
+                                            </h:complexType>
+                                        </h:element>
+                                    </h:sequence>
+                                </h:complexType>
+                            </h:element>
+
+                        </h:choice>
+
+                    </h:complexType>
+                </h:element>
+
+                <h:element name="service" minOccurs="0" maxOccurs="unbounded">
+                    <h:complexType>
+                        <h:sequence>
+                            <h:element name="role" type="h:string" minOccurs="1" maxOccurs="1"/>
+                            <h:element name="version" type="h:string" minOccurs="0" maxOccurs="1"/>
+                            <h:element name="url" type="h:string" minOccurs="0" maxOccurs="unbounded" />
+                            <h:element name="param" minOccurs="0" maxOccurs="unbounded">
+                                <h:complexType>
+                                    <h:sequence minOccurs="0">
+                                        <h:element name="name" type="h:string" />
+                                        <h:element name="value" type="h:string" />
+                                    </h:sequence>
+                                    <h:attribute name="name" type="h:string" use="optional" />
+                                    <h:attribute name="value" type="h:string" use="optional" />
+                                </h:complexType>
+                            </h:element>
+                            <h:element name="dispatch" minOccurs="0" maxOccurs="1">
+                                <h:complexType>
+                                    <h:all>
+                                        <h:element name="contributor-name" type="h:string" minOccurs="0" maxOccurs="1"/>
+                                        <h:element name="ha-contributor-name" type="h:string" minOccurs="0" maxOccurs="1"/>
+                                        <h:element name="classname" type="h:string" minOccurs="0" maxOccurs="1"/>
+                                        <h:element name="ha-classname" type="h:string" minOccurs="0" maxOccurs="1"/>
+                                        <h:element name="http-client-factory" type="h:string" minOccurs="0" maxOccurs="1"/>
+                                        <h:element name="use-two-way-ssl" type="h:string" minOccurs="0" maxOccurs="1"/>
+                                    </h:all>
+                                </h:complexType>
+                            </h:element>
+                        </h:sequence>
+                    </h:complexType>
+                </h:element>
+
+                <h:element name="application" minOccurs="0" maxOccurs="unbounded">
+                    <h:complexType>
+                        <h:sequence>
+                            <h:element name="name" type="h:string" minOccurs="1" maxOccurs="1"/>
+                            <h:element name="url" type="h:string" minOccurs="0" maxOccurs="unbounded" />
+                            <h:element name="param" minOccurs="0" maxOccurs="unbounded">
+                                <h:complexType>
+                                    <h:sequence minOccurs="0">
+                                        <h:element name="name" type="h:string" />
+                                        <h:element name="value" type="h:string" />
+                                    </h:sequence>
+                                    <h:attribute name="name" type="h:string" use="optional" />
+                                    <h:attribute name="value" type="h:string" use="optional" />
+                                </h:complexType>
+                            </h:element>
+                        </h:sequence>
+                    </h:complexType>
+                </h:element>
+
+                <h:element name="redeployTime" type="h:long" minOccurs="0"/>
+
+            </h:sequence>
+        </h:complexType>
+    </h:element>
+</h:schema>

@@ -1,0 +1,57 @@
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<service role="STORM" name="storm" version="0.9.3">
+    <metadata>
+        <type>API</type>
+        <context>/storm/api</context>
+        <shortDesc>Apache Storm API</shortDesc>
+        <description>Apache Storm is a free and open source distributed realtime computation system. 
+            Apache Storm makes it easy to reliably process unbounded streams of data, doing for realtime processing what Hadoop did for batch processing.</description>
+        <samples>
+            <sample>
+                <description>Fetch the cluster configuration</description>
+                <method>GET</method>
+                <path>api/v1/cluster/configuration</path>
+            </sample>
+            <sample>
+                <description>Fetch summary for a supervisors running on a host named 'supervisor-daemon-host-name'</description>
+                <method>GET</method>
+                <path>api/v1/supervisor?host=supervisor-daemon-host-name</path>
+            </sample>
+            <sample>
+                <description>You may check out Apache Storm's REST API documentation here</description>
+                <value>http://storm.apache.org/releases/current/STORM-UI-REST-API.html</value>
+            </sample>
+        </samples>
+    </metadata>
+    <routes>
+        <route path="/storm/api/**"/>
+        <route path="/storm/api/v1/topology/*">
+            <rewrite apply="STORM/storm/logs/outbound" to="response.body"/>
+        </route>
+        <route path="/storm/api/v1/topology/**/component/**?**">
+            <rewrite apply="STORM/storm/logs/outbound" to="response.body"/>
+        </route>
+    </routes>
+    <dispatch classname="org.apache.knox.gateway.storm.StormDispatch"/>
+    <testURLs>
+        <testURL>/storm/api/v1/cluster/configuration</testURL>
+        <testURL>/storm/api/v1/cluster/summary</testURL>
+        <testURL>/storm/api/v1/supervisor/summary</testURL>
+        <testURL>/storm/api/v1/topology/summary</testURL>
+    </testURLs>
+</service>
