@@ -69,7 +69,7 @@ function main {
    setVerbose "$@"
    checkJava
    buildAppJavaOpts
-   $JAVA "${APP_JAVA_OPTS[@]}" -jar "$APP_JAR" "$@" || exit 1
+   "$JAVA" "${APP_JAVA_OPTS[@]}" -jar "$APP_JAR" "$@" || exit 1
    return 0
 }
 
