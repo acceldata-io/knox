@@ -263,7 +263,7 @@
         <metrics.version>4.1.16</metrics.version>
         <mina.version>2.0.27</mina.version>
         <mockito.version>4.8.1</mockito.version>
-        <netty.version>4.1.123.Final</netty.version>
+        <netty.version>4.1.132.Final</netty.version>
         <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
         <nodejs.version>v14.15.0</nodejs.version>
         <okhttp.version>2.7.5</okhttp.version>
