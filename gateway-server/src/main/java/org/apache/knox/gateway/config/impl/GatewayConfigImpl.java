@@ -128,6 +128,7 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   private static final String HTTP_CLIENT_MAX_CONNECTION = GATEWAY_CONFIG_FILE_PREFIX + ".httpclient.maxConnections";
   private static final String HTTP_CLIENT_CONNECTION_TIMEOUT = GATEWAY_CONFIG_FILE_PREFIX + ".httpclient.connectionTimeout";
   private static final String HTTP_CLIENT_SOCKET_TIMEOUT = GATEWAY_CONFIG_FILE_PREFIX + ".httpclient.socketTimeout";
+  private static final String HTTP_CLIENT_COOKIE_SPEC = GATEWAY_CONFIG_FILE_PREFIX + ".httpclient.cookieSpec";
   private static final String THREAD_POOL_MAX = GATEWAY_CONFIG_FILE_PREFIX + ".threadpool.max";
   public static final String HTTP_SERVER_REQUEST_BUFFER = GATEWAY_CONFIG_FILE_PREFIX + ".httpserver.requestBuffer";
   public static final String HTTP_SERVER_REQUEST_HEADER_BUFFER = GATEWAY_CONFIG_FILE_PREFIX + ".httpserver.requestHeaderBuffer";
@@ -165,7 +166,7 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   public static final String WEBSHELL_READ_BUFFER_SIZE = GATEWAY_CONFIG_FILE_PREFIX + ".webshell.read.buffer.size";
 
   /**
-   * Properties for for gateway port mapping feature
+   * Properties for gateway port mapping feature
    */
   public static final String GATEWAY_PORT_MAPPING_PREFIX = GATEWAY_CONFIG_FILE_PREFIX + ".port.mapping.";
   public static final String GATEWAY_PORT_MAPPING_REGEX = GATEWAY_CONFIG_FILE_PREFIX + "\\.port\\.mapping\\..*";
@@ -280,19 +281,35 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   /* property that specifies list of services for which we need to append service name to the X-Forward-Context header */
   public static final String X_FORWARD_CONTEXT_HEADER_APPEND_SERVICES = GATEWAY_CONFIG_FILE_PREFIX + ".xforwarded.header.context.append.servicename";
 
-  private static final String TOKEN_STATE_SERVER_MANAGED = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.exp.server-managed";
+  private static final String KNOX_TOKEN_PREFIX = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token";
+  private static final String TOKEN_STATE_SERVER_MANAGED = KNOX_TOKEN_PREFIX + ".exp.server-managed";
+  private static final String USERS_CAN_SEE_ALL_TOKENS = KNOX_TOKEN_PREFIX + ".management.users.can.see.all.tokens";
+  private static final String SKIP_TOKEN_MIGRATION= KNOX_TOKEN_PREFIX + ".migration.skip";
+  private static final String ARCHIVE_MIGRATED_TOKENS= KNOX_TOKEN_PREFIX + ".migration.archive.tokens";
+  private static final String MIGRATE_EXPIRED_TOKENS= KNOX_TOKEN_PREFIX + ".migration.include.expired.tokens";
+  private static final String TOKEN_MIGRATION_PRINTS_VERBOSE_MESSAGES= KNOX_TOKEN_PREFIX + ".migration.verbose";
+  private static final String TOKEN_MIGRATION_PROGRESS_COUNT= KNOX_TOKEN_PREFIX + ".migration.progress.count";
 
   private static final String CLOUDERA_MANAGER_DESCRIPTORS_MONITOR_INTERVAL = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.descriptors.monitor.interval";
   private static final String CLOUDERA_MANAGER_ADVANCED_SERVICE_DISCOVERY_CONF_MONITOR_INTERVAL = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.advanced.service.discovery.config.monitor.interval";
   private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_REPOSITORY_CACHE_ENTRY_TTL = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.repository.cache.entry.ttl";
   private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_MAX_RETRY_ATTEMPS = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.maximum.retry.attemps";
+  private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_CONNECT_TIMEOUT = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.connect.timeout.ms";
+  private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_READ_TIMEOUT = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.read.timeout.ms";
+  private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_WRITE_TIMEOUT = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.write.timeout.ms";
+  private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_EXCLUDED_SERVICE_TYPES = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.excluded.service.types";
+  private static final String CLOUDERA_MANAGER_SERVICE_DISCOVERY_EXCLUDED_ROLE_TYPES = GATEWAY_CONFIG_FILE_PREFIX + ".cloudera.manager.service.discovery.excluded.role.types";
 
-  private static final String KNOX_TOKEN_EVICTION_INTERVAL = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.eviction.interval";
-  private static final String KNOX_TOKEN_EVICTION_GRACE_PERIOD = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.eviction.grace.period";
-  private static final String KNOX_TOKEN_ALIAS_PERSISTENCE_INTERVAL = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.state.alias.persistence.interval";
-  private static final String KNOX_TOKEN_PERMISSIVE_VALIDATION_ENABLED = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.permissive.validation";
-  private static final String KNOX_TOKEN_HASH_ALGORITHM = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.hash.algorithm";
-  public static final String KNOX_TOKEN_USER_LIMIT = GATEWAY_CONFIG_FILE_PREFIX + ".knox.token.limit.per.user";
+  private static final long CLOUDERA_MANAGER_SERVICE_DISCOVERY_CONNECT_TIMEOUT_DEFAULT = 10000;
+  private static final long CLOUDERA_MANAGER_SERVICE_DISCOVERY_READ_TIMEOUT_DEFAULT = 10000;
+  private static final long CLOUDERA_MANAGER_SERVICE_DISCOVERY_WRITE_TIMEOUT_DEFAULT = 10000;
+
+  private static final String KNOX_TOKEN_EVICTION_INTERVAL = KNOX_TOKEN_PREFIX + ".eviction.interval";
+  private static final String KNOX_TOKEN_EVICTION_GRACE_PERIOD = KNOX_TOKEN_PREFIX + ".eviction.grace.period";
+  private static final String KNOX_TOKEN_ALIAS_PERSISTENCE_INTERVAL = KNOX_TOKEN_PREFIX + ".state.alias.persistence.interval";
+  private static final String KNOX_TOKEN_PERMISSIVE_VALIDATION_ENABLED = KNOX_TOKEN_PREFIX + ".permissive.validation";
+  private static final String KNOX_TOKEN_HASH_ALGORITHM = KNOX_TOKEN_PREFIX + ".hash.algorithm";
+  public static final String KNOX_TOKEN_USER_LIMIT = KNOX_TOKEN_PREFIX + ".limit.per.user";
   private static final long KNOX_TOKEN_EVICTION_INTERVAL_DEFAULT = TimeUnit.MINUTES.toSeconds(5);
   private static final long KNOX_TOKEN_EVICTION_GRACE_PERIOD_DEFAULT = TimeUnit.HOURS.toSeconds(24);
   private static final long KNOX_TOKEN_ALIAS_PERSISTENCE_INTERVAL_DEFAULT = TimeUnit.SECONDS.toSeconds(15);
@@ -309,12 +326,14 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   private static final String GLOBAL_LOGOUT_PAGE_URL = "knox.global.logout.page.url";
   private static final String KNOX_INCOMING_XFORWARDED_ENABLED = "gateway.incoming.xforwarded.enabled";
 
+  private static final String UI_BANNER_TEXT = GATEWAY_CONFIG_FILE_PREFIX + ".ui.banner.text";
+
   //Gateway Database related properties
-  private static final String GATEWAY_DATABASE_TYPE = GATEWAY_CONFIG_FILE_PREFIX + ".database.type";
-  private static final String GATEWAY_DATABASE_CONN_URL = GATEWAY_CONFIG_FILE_PREFIX + ".database.connection.url";
-  private static final String GATEWAY_DATABASE_HOST =  GATEWAY_CONFIG_FILE_PREFIX + ".database.host";
-  private static final String GATEWAY_DATABASE_PORT =  GATEWAY_CONFIG_FILE_PREFIX + ".database.port";
-  private static final String GATEWAY_DATABASE_NAME =  GATEWAY_CONFIG_FILE_PREFIX + ".database.name";
+  public static final String GATEWAY_DATABASE_TYPE = GATEWAY_CONFIG_FILE_PREFIX + ".database.type";
+  public static final String GATEWAY_DATABASE_CONN_URL = GATEWAY_CONFIG_FILE_PREFIX + ".database.connection.url";
+  public static final String GATEWAY_DATABASE_HOST =  GATEWAY_CONFIG_FILE_PREFIX + ".database.host";
+  public static final String GATEWAY_DATABASE_PORT =  GATEWAY_CONFIG_FILE_PREFIX + ".database.port";
+  public static final String GATEWAY_DATABASE_NAME =  GATEWAY_CONFIG_FILE_PREFIX + ".database.name";
   private static final String GATEWAY_DATABASE_SSL_ENABLED =  GATEWAY_CONFIG_FILE_PREFIX + ".database.ssl.enabled";
   private static final String GATEWAY_DATABASE_VERIFY_SERVER_CERT =  GATEWAY_CONFIG_FILE_PREFIX + ".database.ssl.verify.server.cert";
   private static final String GATEWAY_DATABASE_TRUSTSTORE_FILE =  GATEWAY_CONFIG_FILE_PREFIX + ".database.ssl.truststore.file";
@@ -332,6 +351,11 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
 
   private static final String GATEWAY_SERVLET_ASYNC_SUPPORTED = GATEWAY_CONFIG_FILE_PREFIX + ".servlet.async.supported";
   private static final boolean GATEWAY_SERVLET_ASYNC_SUPPORTED_DEFAULT = false;
+
+  private static final String GATEWAY_HEALTH_CHECK_TOPOLOGIES = GATEWAY_CONFIG_FILE_PREFIX + ".health.check.topologies";
+
+  private static final String JWKS_OUTAGE_CACHE_TTL = GATEWAY_CONFIG_FILE_PREFIX + ".jwks.outage.cache.ttl";;
+  private static final long JWKS_OUTAGE_CACHE_TTL_DEFAULT = TimeUnit.HOURS.toMillis(2);
 
   public GatewayConfigImpl() {
     init();
@@ -1283,6 +1307,16 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   }
 
   @Override
+  public Collection<String> getClouderaManagerServiceDiscoveryExcludedServiceTypes() {
+    return getTrimmedStringCollection(CLOUDERA_MANAGER_SERVICE_DISCOVERY_EXCLUDED_SERVICE_TYPES);
+  }
+
+  @Override
+  public Collection<String> getClouderaManagerServiceDiscoveryExcludedRoleTypes() {
+    return getTrimmedStringCollection(CLOUDERA_MANAGER_SERVICE_DISCOVERY_EXCLUDED_ROLE_TYPES);
+  }
+
+  @Override
   public boolean isServerManagedTokenStateEnabled() {
     return getBoolean(TOKEN_STATE_SERVER_MANAGED, false);
   }
@@ -1477,8 +1511,91 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   }
 
   @Override
+  public Set<String> getHealthCheckTopologies() {
+    final Collection<String> topologies = getTrimmedStringCollection(GATEWAY_HEALTH_CHECK_TOPOLOGIES);
+    return topologies == null ? Collections.emptySet() : new HashSet<>(topologies);
+  }
+
+  @Override
   public boolean isAsyncSupported() {
     return getBoolean(GATEWAY_SERVLET_ASYNC_SUPPORTED, GATEWAY_SERVLET_ASYNC_SUPPORTED_DEFAULT);
+  }
+
+  @Override
+  public boolean canSeeAllTokens(String userName) {
+    final Collection<String> usersCanSeeAllTokens = getTrimmedStringCollection(USERS_CAN_SEE_ALL_TOKENS);
+    return usersCanSeeAllTokens == null ? false : usersCanSeeAllTokens.contains(userName);
+  }
+
+  @Override
+  public Map<String, Collection<String>> getApplicationPathAliases() {
+    return getPathAliases(".application");
+  }
+
+  @Override
+  public long getServiceDiscoveryConnectTimeoutMillis() {
+    return getLong(CLOUDERA_MANAGER_SERVICE_DISCOVERY_CONNECT_TIMEOUT, CLOUDERA_MANAGER_SERVICE_DISCOVERY_CONNECT_TIMEOUT_DEFAULT);
+  }
+
+  @Override
+  public long getServiceDiscoveryReadTimeoutMillis() {
+    return getLong(CLOUDERA_MANAGER_SERVICE_DISCOVERY_READ_TIMEOUT, CLOUDERA_MANAGER_SERVICE_DISCOVERY_READ_TIMEOUT_DEFAULT);
+  }
+
+  @Override
+  public long getServiceDiscoveryWriteTimeoutMillis() {
+    return getLong(CLOUDERA_MANAGER_SERVICE_DISCOVERY_WRITE_TIMEOUT, CLOUDERA_MANAGER_SERVICE_DISCOVERY_WRITE_TIMEOUT_DEFAULT);
+  }
+
+  private Map<String, Collection<String>> getPathAliases(String qualifier) {
+    final String prefix = GATEWAY_CONFIG_FILE_PREFIX + qualifier + DEPLOYMENT_PATH_ALIAS;
+    final Map<String, Collection<String>> pathAliases = new HashMap<>();
+    this.forEach(config -> {
+      if (config.getKey().startsWith(prefix)) {
+        pathAliases.put(config.getKey().substring(prefix.length()).toLowerCase(Locale.getDefault()), getTrimmedStringCollection(config.getKey()));
+      }
+    });
+    return pathAliases;
+  }
+
+  @Override
+  public boolean skipTokenMigration() {
+    return getBoolean(SKIP_TOKEN_MIGRATION, false);
+  }
+
+  @Override
+  public boolean archiveMigratedTokens() {
+    return getBoolean(ARCHIVE_MIGRATED_TOKENS, false);
+  }
+
+  @Override
+  public boolean migrateExpiredTokens() {
+    return getBoolean(MIGRATE_EXPIRED_TOKENS, false);
+  }
+
+  @Override
+  public boolean printVerboseTokenMigrationMessages() {
+    return getBoolean(TOKEN_MIGRATION_PRINTS_VERBOSE_MESSAGES, true);
+  }
+
+  @Override
+  public int getTokenMigrationProgressCount() {
+    return getInt(TOKEN_MIGRATION_PROGRESS_COUNT, 10);
+  }
+
+  @Override
+  public String getHttpClientCookieSpec() {
+    return get(HTTP_CLIENT_COOKIE_SPEC);
+  }
+
+  @Override
+  public String getBannerText() {
+    return get(UI_BANNER_TEXT, "");
+  }
+
+  @Override
+  public long getJwksOutageCacheTTL() {
+    return getLong(JWKS_OUTAGE_CACHE_TTL, JWKS_OUTAGE_CACHE_TTL_DEFAULT);
   }
 
 }
