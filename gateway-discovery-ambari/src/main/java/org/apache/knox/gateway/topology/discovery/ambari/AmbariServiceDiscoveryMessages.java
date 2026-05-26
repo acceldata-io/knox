@@ -109,6 +109,18 @@ public interface AmbariServiceDiscoveryMessages {
              text = "REST invocation {0} yielded a response without any JSON.")
     void noJSON(String url);
 
+    @Message(level = MessageLevel.ERROR,
+             text = "Failed to parse JSON response from {0} : {1}")
+    void jsonParseError(String url, @StackTrace(level = MessageLevel.DEBUG) Exception e);
+
+    @Message(level = MessageLevel.WARN,
+             text = "Bulk service config fetch failed; retrying per-service for cluster {0}")
+    void fallbackToPerServiceConfigFetch(String clusterName);
+
+    @Message(level = MessageLevel.WARN,
+             text = "Skipping service config for {0} in cluster {1}: failed to parse response")
+    void skippingServiceConfigDueToParseError(String serviceName, String clusterName);
+
     @Message(level = MessageLevel.TRACE,
              text = "REST invocation result: {0}")
     void debugJSON(String json);
