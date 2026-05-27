@@ -110,19 +110,57 @@ class AmbariClientCommon {
 
     private void processServiceConfigsJSON(JSONObject serviceConfigsJSON,
                                            Map<String, Map<String, AmbariCluster.ServiceConfiguration>> serviceConfigurations) {
-        JSONArray serviceConfigs = (JSONArray) serviceConfigsJSON.get("items");
+        if (serviceConfigsJSON == null) {
+            return;
+        }
+
+        Object items = serviceConfigsJSON.get("items");
+        if (!(items instanceof JSONArray)) {
+            return;
+        }
+
+        JSONArray serviceConfigs = (JSONArray) items;
         for (Object serviceConfig : serviceConfigs) {
-            String serviceName = (String) ((JSONObject) serviceConfig).get("service_name");
-            JSONArray configurations = (JSONArray) ((JSONObject) serviceConfig).get("configurations");
+            if (!(serviceConfig instanceof JSONObject)) {
+                continue;
+            }
+
+            JSONObject serviceConfigJSON = (JSONObject) serviceConfig;
+            Object serviceNameValue = serviceConfigJSON.get("service_name");
+            if (!(serviceNameValue instanceof String)) {
+                continue;
+            }
+            String serviceName = (String) serviceNameValue;
+
+            Object configurationsValue = serviceConfigJSON.get("configurations");
+            if (!(configurationsValue instanceof JSONArray)) {
+                continue;
+            }
+
+            JSONArray configurations = (JSONArray) configurationsValue;
             for (Object configuration : configurations) {
-                String configType = (String) ((JSONObject) configuration).get("type");
-                String configVersion = String.valueOf(((JSONObject) configuration).get("version"));
+                if (!(configuration instanceof JSONObject)) {
+                    continue;
+                }
+
+                JSONObject configurationJSON = (JSONObject) configuration;
+                Object configTypeValue = configurationJSON.get("type");
+                if (!(configTypeValue instanceof String)) {
+                    continue;
+                }
+
+                String configType = (String) configTypeValue;
+                String configVersion = String.valueOf(configurationJSON.get("version"));
 
                 Map<String, String> configProps = new HashMap<>();
-                JSONObject configProperties = (JSONObject) ((JSONObject) configuration).get("properties");
-                for (Entry<String, Object> entry : configProperties.entrySet()) {
-                    configProps.put(entry.getKey(), String.valueOf(entry.getValue()));
+                Object propertiesValue = configurationJSON.get("properties");
+                if (propertiesValue instanceof JSONObject) {
+                    JSONObject configProperties = (JSONObject) propertiesValue;
+                    for (Entry<String, Object> entry : configProperties.entrySet()) {
+                        configProps.put(entry.getKey(), String.valueOf(entry.getValue()));
+                    }
                 }
+
                 serviceConfigurations.computeIfAbsent(serviceName, k -> new HashMap<>())
                                      .put(configType, new AmbariCluster.ServiceConfiguration(configType,
                                                                                              configVersion,
