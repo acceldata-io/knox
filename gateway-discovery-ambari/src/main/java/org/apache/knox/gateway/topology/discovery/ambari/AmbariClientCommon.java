@@ -175,8 +175,16 @@ class AmbariClientCommon {
         String servicesURL = String.format(Locale.ROOT, "%s" + AMBARI_SERVICES_URI, discoveryAddress, clusterName);
         JSONObject servicesJSON = restClient.invoke(servicesURL, discoveryUser, discoveryPwdAlias);
         if (servicesJSON != null) {
-            JSONArray items = (JSONArray) servicesJSON.get("items");
+            Object itemsObject = servicesJSON.get("items");
+            if (!(itemsObject instanceof JSONArray)) {
+                return serviceNames;
+            }
+
+            JSONArray items = (JSONArray) itemsObject;
             for (Object item : items) {
+                if (!(item instanceof JSONObject)) {
+                    continue;
+                }
                 JSONObject serviceInfo = (JSONObject) ((JSONObject) item).get("ServiceInfo");
                 if (serviceInfo != null) {
                     String name = (String) serviceInfo.get("service_name");
