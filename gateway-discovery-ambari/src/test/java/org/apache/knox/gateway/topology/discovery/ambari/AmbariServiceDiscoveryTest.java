@@ -265,6 +265,22 @@ public class AmbariServiceDiscoveryTest {
         }
     }
 
+    @Test
+    public void testGetActiveServiceConfigurationsFallsBackToPerServiceFetch() {
+        final String discoveryAddress = "http://ambarihost:8080";
+        final String clusterName = "testCluster";
+
+        AmbariClientCommon ambariClient = new AmbariClientCommon(new FallbackTestRESTInvoker(clusterName));
+        Map<String, Map<String, AmbariCluster.ServiceConfiguration>> serviceConfigs =
+                ambariClient.getActiveServiceConfigurations(discoveryAddress, clusterName, null, null);
+
+        assertNotNull(serviceConfigs);
+        assertEquals(2, serviceConfigs.size());
+        assertNotNull(serviceConfigs.get("HBASE"));
+        assertNotNull(serviceConfigs.get("HDFS"));
+        assertNull(serviceConfigs.get("HIVE"));
+    }
+
     /**
      * ServiceDiscovery implementation derived from AmbariServiceDiscovery, so the invokeREST method can be overridden
      * to eliminate the need to perform actual HTTP interactions with a real Ambari endpoint.
@@ -317,6 +333,40 @@ public class AmbariServiceDiscoveryTest {
         @Override
         JSONObject invoke(String url, String username, String passwordAlias) {
             return cannedResponses.get(url.substring(url.indexOf("/api")));
+        }
+    }
+
+    private static final class FallbackTestRESTInvoker extends RESTInvoker {
+        private Map<String, JSONObject> cannedResponses = new HashMap<>();
+        private final String bulkServiceConfigsUri;
+
+        FallbackTestRESTInvoker(String clusterName) {
+            super(null, null);
+            bulkServiceConfigsUri = String.format(Locale.ROOT, AmbariClientCommon.AMBARI_SERVICECONFIGS_URI, clusterName);
+
+            cannedResponses.put(String.format(Locale.ROOT, AmbariClientCommon.AMBARI_SERVICES_URI, clusterName),
+                    (JSONObject) JSONValue.parse(SERVICES_JSON_FOR_FALLBACK_TEST_TEMPLATE.replaceAll(TestRESTInvoker.CLUSTER_PLACEHOLDER,
+                            clusterName)));
+
+            cannedResponses.put(String.format(Locale.ROOT, AmbariClientCommon.AMBARI_SERVICECONFIGS_BY_SERVICE_URI,
+                            clusterName, "HBASE"),
+                    (JSONObject) JSONValue.parse(SERVICECONFIGS_BY_SERVICE_HBASE_TEMPLATE.replaceAll(TestRESTInvoker.CLUSTER_PLACEHOLDER,
+                            clusterName)));
+            cannedResponses.put(String.format(Locale.ROOT, AmbariClientCommon.AMBARI_SERVICECONFIGS_BY_SERVICE_URI,
+                            clusterName, "HDFS"),
+                    (JSONObject) JSONValue.parse(SERVICECONFIGS_BY_SERVICE_HDFS_TEMPLATE.replaceAll(TestRESTInvoker.CLUSTER_PLACEHOLDER,
+                            clusterName)));
+            cannedResponses.put(String.format(Locale.ROOT, AmbariClientCommon.AMBARI_SERVICECONFIGS_BY_SERVICE_URI,
+                    clusterName, "HIVE"), null);
+        }
+
+        @Override
+        JSONObject invoke(String url, String username, String passwordAlias) {
+            String uri = url.substring(url.indexOf("/api"));
+            if (bulkServiceConfigsUri.equals(uri)) {
+                return null;
+            }
+            return cannedResponses.get(uri);
         }
     }
 
@@ -1081,6 +1131,51 @@ public class AmbariServiceDiscoveryTest {
     "      \"service_name\" : \"YARN\",\n" +
     "      \"stack_id\" : \"HDP-2.6\",\n" +
     "      \"user\" : \"admin\"\n" +
+    "    }\n" +
+    "  ]\n" +
+    "}";
+
+    private static final String SERVICES_JSON_FOR_FALLBACK_TEST_TEMPLATE =
+    "{\n" +
+    "  \"items\" : [\n" +
+    "    { \"ServiceInfo\" : { \"service_name\" : \"HBASE\" } },\n" +
+    "    { \"ServiceInfo\" : { \"service_name\" : \"HDFS\" } },\n" +
+    "    { \"ServiceInfo\" : { \"service_name\" : \"HIVE\" } }\n" +
+    "  ]\n" +
+    "}";
+
+    private static final String SERVICECONFIGS_BY_SERVICE_HBASE_TEMPLATE =
+    "{\n" +
+    "  \"items\" : [\n" +
+    "    {\n" +
+    "      \"service_name\" : \"HBASE\",\n" +
+    "      \"configurations\" : [\n" +
+    "        {\n" +
+    "          \"type\" : \"hbase-site\",\n" +
+    "          \"version\" : 1,\n" +
+    "          \"properties\" : {\n" +
+    "            \"hbase.rootdir\" : \"hdfs://"+TestAmbariServiceDiscovery.CLUSTER_PLACEHOLDER+"/apps/hbase/data\"\n" +
+    "          }\n" +
+    "        }\n" +
+    "      ]\n" +
+    "    }\n" +
+    "  ]\n" +
+    "}";
+
+    private static final String SERVICECONFIGS_BY_SERVICE_HDFS_TEMPLATE =
+    "{\n" +
+    "  \"items\" : [\n" +
+    "    {\n" +
+    "      \"service_name\" : \"HDFS\",\n" +
+    "      \"configurations\" : [\n" +
+    "        {\n" +
+    "          \"type\" : \"hdfs-site\",\n" +
+    "          \"version\" : 1,\n" +
+    "          \"properties\" : {\n" +
+    "            \"dfs.nameservices\" : \""+TestAmbariServiceDiscovery.CLUSTER_PLACEHOLDER+"\"\n" +
+    "          }\n" +
+    "        }\n" +
+    "      ]\n" +
     "    }\n" +
     "  ]\n" +
     "}";
