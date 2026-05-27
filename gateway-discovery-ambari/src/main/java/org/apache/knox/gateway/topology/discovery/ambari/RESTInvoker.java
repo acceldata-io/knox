@@ -161,8 +161,14 @@ class RESTInvoker {
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
                   try {
-                    result = (JSONObject) JSONValue.parseWithException(EntityUtils.toString(entity));
-                    log.debugJSON(result.toJSONString());
+                    String responseBody = EntityUtils.toString(entity);
+                    Object parsedResult = JSONValue.parseWithException(responseBody);
+                    if (parsedResult instanceof JSONObject) {
+                      result = (JSONObject) parsedResult;
+                      log.debugJSON(result.toJSONString());
+                    } else {
+                      log.debugJSON(responseBody);
+                    }
                   } catch (ParseException e) {
                     log.jsonParseError(url, e);
                   }
