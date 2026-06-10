@@ -185,12 +185,13 @@ class AmbariClientCommon {
                 if (!(item instanceof JSONObject)) {
                     continue;
                 }
-                JSONObject serviceInfo = (JSONObject) ((JSONObject) item).get("ServiceInfo");
-                if (serviceInfo != null) {
-                    String name = (String) serviceInfo.get("service_name");
-                    if (name != null) {
-                        serviceNames.add(name);
-                    }
+                Object serviceInfoValue = ((JSONObject) item).get("ServiceInfo");
+                if (!(serviceInfoValue instanceof JSONObject)) {
+                    continue;
+                }
+                Object nameValue = ((JSONObject) serviceInfoValue).get("service_name");
+                if (nameValue instanceof String) {
+                    serviceNames.add((String) nameValue);
                 }
             }
         }
