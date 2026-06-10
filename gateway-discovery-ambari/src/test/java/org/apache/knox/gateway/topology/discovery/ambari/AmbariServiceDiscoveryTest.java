@@ -19,6 +19,12 @@ package org.apache.knox.gateway.topology.discovery.ambari;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 import org.apache.commons.io.FileUtils;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicStatusLine;
 import org.apache.knox.gateway.config.GatewayConfig;
 import org.apache.knox.gateway.services.security.AliasService;
 import org.apache.knox.gateway.topology.discovery.ServiceDiscovery;
@@ -279,6 +285,96 @@ public class AmbariServiceDiscoveryTest {
         assertNotNull(serviceConfigs.get("HBASE"));
         assertNotNull(serviceConfigs.get("HDFS"));
         assertNull(serviceConfigs.get("HIVE"));
+    }
+
+    /**
+     * Covers the dead-end branch on the fallback path: when the bulk fetch fails AND the services
+     * listing call also returns null (e.g. transient error), getServiceNames yields an empty list.
+     * The method must return an empty (non-null) map rather than throwing or looping.
+     */
+    @Test
+    public void testGetActiveServiceConfigurationsFallbackWithNoServiceNames() {
+        final String discoveryAddress = "http://ambarihost:8080";
+        final String clusterName = "testCluster";
+
+        // Returns null for every URL: the bulk config fetch fails (triggering fallback) and the
+        // services listing also fails (yielding an empty service-name list).
+        RESTInvoker allNullInvoker = new RESTInvoker(null, null) {
+            @Override
+            JSONObject invoke(String url, String username, String passwordAlias) {
+                return null;
+            }
+        };
+
+        AmbariClientCommon ambariClient = new AmbariClientCommon(allNullInvoker);
+        Map<String, Map<String, AmbariCluster.ServiceConfiguration>> serviceConfigs =
+                ambariClient.getActiveServiceConfigurations(discoveryAddress, clusterName, null, null);
+
+        assertNotNull(serviceConfigs);
+        assertTrue(serviceConfigs.isEmpty());
+    }
+
+    /**
+     * Regression test for ODP-6836: a 200 response whose body is not valid JSON must NOT cause an NPE.
+     * The lenient JSONValue.parse() used to return null for malformed input, and the subsequent
+     * result.toJSONString() threw. invoke() now uses parseWithException() inside a try/catch and must
+     * return null cleanly so callers (e.g. the bulk service-config fetch) can fall back per-service.
+     */
+    @Test
+    public void testInvokeReturnsNullOnMalformedJsonResponse() throws Exception {
+        // A body that is syntactically broken JSON (truncated object) - parseWithException will reject it.
+        final String malformedBody = "{ \"items\" : [ { \"service_name\" : \"HBASE\" ";
+
+        RESTInvoker invoker = newInvokerWithStubbedResponse(malformedBody);
+
+        JSONObject result = invoker.invoke("http://ambarihost:8080/api/v1/clusters/test", "user", null);
+
+        assertNull("Malformed JSON must yield null rather than throwing", result);
+    }
+
+    /**
+     * Counterpart to the regression test: a well-formed body must still parse into a JSONObject,
+     * confirming the parseWithException switch did not break the happy path.
+     */
+    @Test
+    public void testInvokeParsesValidJsonResponse() throws Exception {
+        final String validBody = "{ \"items\" : [ { \"service_name\" : \"HBASE\" } ] }";
+
+        RESTInvoker invoker = newInvokerWithStubbedResponse(validBody);
+
+        JSONObject result = invoker.invoke("http://ambarihost:8080/api/v1/clusters/test", "user", null);
+
+        assertNotNull(result);
+        assertTrue(result.containsKey("items"));
+    }
+
+    /**
+     * Builds a RESTInvoker whose HTTP client is stubbed to return a 200 response carrying the given
+     * body, so invoke()'s real parse path (JSONValue.parseWithException) is exercised end to end.
+     */
+    private static RESTInvoker newInvokerWithStubbedResponse(String responseBody) throws Exception {
+        // A non-null username is passed to invoke(), so only the password alias is resolved here.
+        AliasService aliasService = EasyMock.createNiceMock(AliasService.class);
+        EasyMock.expect(aliasService.getPasswordFromAliasForGateway(EasyMock.anyString()))
+                .andReturn("password".toCharArray()).anyTimes();
+        EasyMock.replay(aliasService);
+
+        CloseableHttpResponse response = EasyMock.createNiceMock(CloseableHttpResponse.class);
+        EasyMock.expect(response.getStatusLine())
+                .andReturn(new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK")).anyTimes();
+        EasyMock.expect(response.getEntity())
+                .andReturn(new StringEntity(responseBody, StandardCharsets.UTF_8)).anyTimes();
+        EasyMock.replay(response);
+
+        CloseableHttpClient httpClient = EasyMock.createNiceMock(CloseableHttpClient.class);
+        EasyMock.expect(httpClient.execute(EasyMock.anyObject(HttpGet.class))).andReturn(response).anyTimes();
+        EasyMock.replay(httpClient);
+
+        RESTInvoker invoker = new RESTInvoker(aliasService, null);
+        Field clientField = RESTInvoker.class.getDeclaredField("httpClient");
+        clientField.setAccessible(true);
+        clientField.set(invoker, httpClient);
+        return invoker;
     }
 
     /**
