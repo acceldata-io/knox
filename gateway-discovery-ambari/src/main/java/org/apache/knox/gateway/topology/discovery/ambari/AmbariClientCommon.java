@@ -93,7 +93,11 @@ class AmbariClientCommon {
             // Bulk fetch failed (e.g., a service has a config property with invalid JSON characters).
             // Fall back to per-service requests so that one broken service doesn't block all discovery.
             log.fallbackToPerServiceConfigFetch(clusterName);
-            for (String serviceName : getServiceNames(discoveryAddress, clusterName, discoveryUser, discoveryPwdAlias)) {
+            List<String> serviceNames = getServiceNames(discoveryAddress, clusterName, discoveryUser, discoveryPwdAlias);
+            if (serviceNames.isEmpty()) {
+                log.noServiceNamesForFallback(clusterName);
+            }
+            for (String serviceName : serviceNames) {
                 String perServiceURL = String.format(Locale.ROOT, "%s" + AMBARI_SERVICECONFIGS_BY_SERVICE_URI,
                                                      discoveryAddress, clusterName, serviceName);
                 JSONObject perServiceJSON = restClient.invoke(perServiceURL, discoveryUser, discoveryPwdAlias);

@@ -121,6 +121,10 @@ public interface AmbariServiceDiscoveryMessages {
              text = "Skipping service config for {0} in cluster {1}: failed to parse response")
     void skippingServiceConfigDueToParseError(String serviceName, String clusterName);
 
+    @Message(level = MessageLevel.WARN,
+             text = "Per-service config fallback found no services for cluster {0}; service configs may be incomplete")
+    void noServiceNamesForFallback(String clusterName);
+
     @Message(level = MessageLevel.TRACE,
              text = "REST invocation result: {0}")
     void debugJSON(String json);
