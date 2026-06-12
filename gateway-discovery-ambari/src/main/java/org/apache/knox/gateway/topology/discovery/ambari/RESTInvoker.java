@@ -18,6 +18,7 @@ package org.apache.knox.gateway.topology.discovery.ambari;
 
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
+import net.minidev.json.parser.ParseException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.config.RequestConfig;
@@ -159,8 +160,18 @@ class RESTInvoker {
               if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
-                  result = (JSONObject) JSONValue.parse((EntityUtils.toString(entity)));
-                  log.debugJSON(result.toJSONString());
+                  try {
+                    String responseBody = EntityUtils.toString(entity);
+                    Object parsedResult = JSONValue.parseWithException(responseBody);
+                    if (parsedResult instanceof JSONObject) {
+                      result = (JSONObject) parsedResult;
+                      log.debugJSON(result.toJSONString());
+                    } else {
+                      log.debugJSON(responseBody);
+                    }
+                  } catch (ParseException e) {
+                    log.jsonParseError(url, e);
+                  }
                 } else {
                   log.noJSON(url);
                 }
