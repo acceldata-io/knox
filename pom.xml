@@ -230,8 +230,6 @@
         <httpcore.version>4.4.14</httpcore.version>
         <httpcore5.version>5.3.6</httpcore5.version>
         <jackson.version>2.18.6</jackson.version>
-        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
-        <jackson.version>2.16.1</jackson.version>
         <jacoco-maven-plugin.version>0.8.6</jacoco-maven-plugin.version>
         <jansi.version>1.18</jansi.version>
         <javax.activation.version>1.2.0</javax.activation.version>
