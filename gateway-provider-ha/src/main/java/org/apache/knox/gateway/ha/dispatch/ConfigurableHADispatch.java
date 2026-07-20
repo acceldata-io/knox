@@ -216,7 +216,6 @@ public class ConfigurableHADispatch extends ConfigurableDispatch {
     HttpResponse inboundResponse = null;
     try {
       inboundResponse = executeOutboundRequest(outboundRequest);
-      writeOutboundResponse(outboundRequest, inboundRequest, outboundResponse, inboundResponse);
     } catch ( IOException e ) {
       /* if non-idempotent requests are not allowed to failover, unless it's a connection error */
       if(!isConnectionError(e.getCause()) && isNonIdempotentAndNonIdempotentFailoverDisabled(outboundRequest)) {
@@ -228,7 +227,9 @@ public class ConfigurableHADispatch extends ConfigurableDispatch {
         LOG.errorConnectingToServer(outboundRequest.getURI().toString(), e);
         failoverRequest(outboundRequest, inboundRequest, outboundResponse, inboundResponse, e);
       }
+      return;
     }
+    writeOutboundResponse(outboundRequest, inboundRequest, outboundResponse, inboundResponse);
   }
 
   private boolean isNonIdempotentAndNonIdempotentFailoverDisabled(HttpUriRequest outboundRequest) {
