@@ -154,7 +154,21 @@
         <module>knox-token-generation-ui</module>
     </modules>
 
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Releases</name>
+            <url>https://repo1.acceldata.dev/repository/odp-staging-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>Snapshot</name>
+            <url>https://repo1.acceldata.dev/repository/odp-staging-snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <properties>
+        <odp.release.version>3.4.3.0-1</odp.release.version>
         <!-- Ensure that source and target version are overridden from base ASF POM.
              This is also used by forbiddenapis to ensure correct signatures are loaded. -->
         <maven.compiler.source>17</maven.compiler.source>
