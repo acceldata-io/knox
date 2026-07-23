@@ -271,7 +271,7 @@
         <mockito.version>4.8.1</mockito.version>
         <netty.version>4.1.135.Final</netty.version>
         <jakarta.mail.version>1.6.8</jakarta.mail.version>
-        <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
+        <nimbus-jose-jwt.version>9.37.4</nimbus-jose-jwt.version>
         <nodejs.version>v14.15.0</nodejs.version>
         <okhttp.version>2.7.5</okhttp.version>
         <opensaml.version>3.4.5</opensaml.version>
