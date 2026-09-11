@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -697,6 +698,18 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
     String value = get(SSL_EXCLUDE_CIPHERS);
     if (value != null && !value.isEmpty() && !"none".equalsIgnoreCase(value.trim())) {
       list = Arrays.asList(value.trim().split("\\s*,\\s*"));
+    }
+    return list;
+  }
+
+  private List<String> splitConfigValueToList(String config) {
+    List<String> list = null;
+    String value = get(config);
+    if (value != null && !value.isEmpty() && !"none".equalsIgnoreCase(value.trim())) {
+      list = Arrays.stream(value.split("[,:\n]"))
+          .map(String::trim)
+          .filter(part -> !part.isEmpty())
+          .collect(Collectors.toList());
     }
     return list;
   }
@@ -1684,6 +1697,27 @@ public class GatewayConfigImpl extends Configuration implements GatewayConfig {
   @Override
   public boolean isStrictTransportEnabled() {
     return getBoolean(STRICT_TRANSPORT_ENABLED, DEFAULT_STRICT_TRANSPORT_ENABLED);
+  }
+
+  @Override
+  public boolean isLDAPSSLEnabled() {
+    return Boolean.parseBoolean(get(LDAP_SSL_ENABLED, "false"));
+  }
+
+  @Override
+  public String getLDAPSSLKeystorePath() {
+    return get(LDAP_SSL_KEYSTORE_PATH, null);
+  }
+
+  @Override
+  public String getLDAPSSLKeystorePasswordAlias() {
+    return get(LDAP_SSL_KEYSTORE_PASSWORD_ALIAS, null);
+  }
+
+  @Override
+  public List<String> getLDAPSSLEnabledCipherSuites() {
+    final List<String> cipherSuites = splitConfigValueToList(LDAP_SSL_ENABLED_CIPHER_SUITES);
+    return cipherSuites == null ? Collections.emptyList() : cipherSuites;
   }
 
   @Override

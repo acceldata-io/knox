@@ -122,6 +122,10 @@ public interface GatewayConfig {
   String DEFAULT_API_SERVICES_VIEW_VERSION = "v2";
 
   String DEPLOYMENT_PATH_ALIAS = ".path.alias.";
+  String LDAP_SSL_ENABLED = "gateway.ldap.ssl.enabled";
+  String LDAP_SSL_KEYSTORE_PATH = "gateway.ldap.ssl.keystore.path";
+  String LDAP_SSL_KEYSTORE_PASSWORD_ALIAS = "gateway.ldap.ssl.keystore.password.alias";
+  String LDAP_SSL_ENABLED_CIPHER_SUITES = "gateway.ldap.ssl.enabled.cipher.suites";
 
   /**
    * The location of the gateway configuration.
@@ -1024,6 +1028,32 @@ public interface GatewayConfig {
    * @return true if the strict transport is enabled; otherwise false
    */
   boolean isStrictTransportEnabled();
+
+  /**
+   * @return true if the embedded LDAP service should expose a secure (LDAPS) transport;
+   * otherwise false
+   */
+  boolean isLDAPSSLEnabled();
+
+  /**
+   * @return the path to the keystore holding the certificate presented by the embedded
+   * LDAP service on its secure transport. When null/blank the gateway identity keystore
+   * ({@link #getIdentityKeystorePath()}) is used.
+   */
+  String getLDAPSSLKeystorePath();
+
+  /**
+   * @return the credential-store alias for the password protecting the keystore returned by
+   * {@link #getLDAPSSLKeystorePath()}. When null/blank the gateway identity keystore password
+   * is used.
+   */
+  String getLDAPSSLKeystorePasswordAlias();
+
+  /**
+   * @return the TLS cipher suites the embedded LDAP service secure transport is restricted to,
+   * or an empty list to use the JVM defaults
+   */
+  List<String> getLDAPSSLEnabledCipherSuites();
 
   /**
    * @return the strict transport option if set; otherwise return the default value 'max-age=31536000'
