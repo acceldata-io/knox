@@ -1194,6 +1194,26 @@ public class GatewayTestConfig extends Configuration implements GatewayConfig {
   }
 
   @Override
+  public boolean isLDAPSSLEnabled() {
+    return false;
+  }
+
+  @Override
+  public String getLDAPSSLKeystorePath() {
+    return null;
+  }
+
+  @Override
+  public String getLDAPSSLKeystorePasswordAlias() {
+    return null;
+  }
+
+  @Override
+  public List<String> getLDAPSSLEnabledCipherSuites() {
+    return Collections.emptyList();
+  }
+
+  @Override
   public String getStrictTransportOption() {
     return "max-age=3001";
   }
