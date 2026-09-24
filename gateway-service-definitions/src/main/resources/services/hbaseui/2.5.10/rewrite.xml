@@ -28,6 +28,10 @@
         pattern="*://*:*/**/hbase/webui/?{host}?{port}">
     <rewrite template="{$serviceUrl[HBASEUI]}/master-status" />
   </rule>
+  <rule dir="IN" name="HBASEUI/hbase/inbound/master/root"
+        pattern="*://*:*/**/hbase/webui/">
+    <rewrite template="{$serviceUrl[HBASEUI]}/master-status" />
+  </rule>
 
   <!-- Make sure that redirects back to the master landing page work -->
   <rule dir="OUT" name="HBASEUI/hbase/outbound/master/root" pattern="/">
@@ -266,6 +270,18 @@
   <rule dir="IN" name="HBASEUI/hbase/inbound/static" pattern="*://*:*/**/hbase/webui/static/{**}">
     <rewrite template="{$serviceUrl[HBASEUI]}/static/{**}" />
   </rule>
+
+  <!-- Rewrites root-relative static asset links (css/js/images) embedded in the HBase Master
+       UI's HTML so the browser requests them through the gateway prefix instead of Knox's
+       own root (e.g. /static/css/bootstrap.min.css -> {gateway}/hbase/webui/static/css/bootstrap.min.css) -->
+  <filter name="HBASEUI/hbase/outbound/html/static">
+    <content type="*/html">
+      <apply path="/static/css/.*" rule="HBASEUI/css"/>
+      <apply path="/static/js/.*" rule="HBASEUI/js"/>
+      <apply path="/static/hbase_logo_small\.png" rule="HBASEUI/png"/>
+      <apply path="/static/.*" rule="HBASEUI/static"/>
+    </content>
+  </filter>
   <rule dir="OUT" name="HBASEUI/png" pattern="/static/hbase_logo_small.png">
     <rewrite template="{$frontend[url]}/hbase/webui/static/hbase_logo_small.png" />
   </rule>

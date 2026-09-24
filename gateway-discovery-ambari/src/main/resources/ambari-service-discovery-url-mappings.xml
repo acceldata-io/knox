@@ -569,4 +569,126 @@
         </properties>
     </service>
 
+    <service name="HUE">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>HUE_SERVER</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>HUE_SERVER</component>
+                <config-property>http_port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="FLINK">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>FLINK_JOBHISTORYSERVER</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>FLINK_JOBHISTORYSERVER</component>
+                <config-property>historyserver.web.port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="KUDUUI">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>KUDU_MASTER</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>KUDU_MASTER</component>
+                <config-property>webserver_port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="TRINOUI">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>TRINO_COORDINATOR</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>TRINO_COORDINATOR</component>
+                <config-property>http_server_port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="PINOT">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>PINOT_CONTROLLER</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>PINOT_CONTROLLER</component>
+                <config-property>controller.port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="OZONE">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>OZONE2_MANAGER</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>OZONE2_MANAGER</component>
+                <config-property>ozone.om.http-port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="OZONE-RECON">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>OZONE2_RECON</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>OZONE2_RECON</component>
+                <config-property>ozone.recon.http-port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="OZONE-SCM">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>OZONE2_STORAGE_CONTAINER_MANAGER</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>OZONE2_STORAGE_CONTAINER_MANAGER</component>
+                <config-property>ozone.scm.http-port</config-property>
+            </property>
+        </properties>
+    </service>
+
+    <service name="OZONE-HTTPFS">
+        <url-pattern>http://{HOST}:9878</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>OZONE2_S3_GATEWAY</component>
+                <hostname/>
+            </property>
+        </properties>
+    </service>
+
 </service-discovery-url-mappings>
