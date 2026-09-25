@@ -597,6 +597,20 @@
         </properties>
     </service>
 
+    <service name="NIFI-REGISTRY">
+        <url-pattern>http://{HOST}:{PORT}</url-pattern>
+        <properties>
+            <property name="HOST">
+                <component>NIFI_REGISTRY2</component>
+                <hostname/>
+            </property>
+            <property name="PORT">
+                <component>NIFI_REGISTRY2</component>
+                <config-property>nifi.registry.web.http.port</config-property>
+            </property>
+        </properties>
+    </service>
+
     <service name="KUDUUI">
         <url-pattern>http://{HOST}:{PORT}</url-pattern>
         <properties>
