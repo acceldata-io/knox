@@ -606,7 +606,7 @@
             </property>
             <property name="PORT">
                 <component>NIFI_REGISTRY2</component>
-                <config-property>nifi.registry.web.http.port</config-property>
+                <config-property>nifi.registry.port</config-property>
             </property>
         </properties>
     </service>
