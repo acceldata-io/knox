@@ -78,7 +78,7 @@
 
   <!-- New rules to support like datanode -->
   <rule dir="IN" name="HDFSUI/hdfs/inbound/namenode/MAINROOT" pattern="*://*:*/**/hdfs/?host={host}?{**}">
-    <rewrite template="{host}/?{**}"/>
+    <rewrite template="{host}/dfshealth.html?{**}"/>
   </rule>
   
   <rule dir="IN" name="HDFSUI/hdfs/inbound/namenode/MAINROOT1" pattern="*://*:*/**/hdfs/{**}?host={host}?{**}">
