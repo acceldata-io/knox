@@ -55,4 +55,17 @@
     </content>
   </filter>
 
+  <filter name="LIVYSERVER/livy/outbound/html/static">
+    <content type="*/html">
+      <apply path="/static/.*" rule="LIVYSERVER/livy/outbound/static"/>
+      <apply path="setBasePath\('[^']*'\)" rule="LIVYSERVER/livy/outbound/basepath"/>
+    </content>
+  </filter>
+  <rule dir="OUT" name="LIVYSERVER/livy/outbound/static" pattern="/static/{**}">
+    <rewrite template="{$frontend[url]}/livy/static/{**}"/>
+  </rule>
+  <rule dir="OUT" name="LIVYSERVER/livy/outbound/basepath" pattern="setBasePath('')">
+    <rewrite template="setBasePath(window.location.pathname.split('/ui')[0])"/>
+  </rule>
+
 </rules>
