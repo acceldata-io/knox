@@ -24,12 +24,16 @@
     </metadata>
     <routes>
         <route path="/trino/">
+            <rewrite apply="TRINOUI/trino/outbound/body"  to="response.body"/>
+            <rewrite apply="TRINOUI/trino/outbound/headers"  to="response.headers"/>
         </route>
         <route path="/trino/**">
             <rewrite apply="TRINOUI/trino/outbound/body"  to="response.body"/>
             <rewrite apply="TRINOUI/trino/outbound/headers"  to="response.headers"/>
         </route>
         <route path="/trino/**?**">
+            <rewrite apply="TRINOUI/trino/outbound/body"  to="response.body"/>
+            <rewrite apply="TRINOUI/trino/outbound/headers"  to="response.headers"/>
         </route>
     </routes>
 </service>

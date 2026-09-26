@@ -34,11 +34,13 @@
         <route path="/hbase/webui/">
             <rewrite apply="HBASEUI/hbase/inbound/master/root" to="request.url"/>
             <rewrite apply="HBASEUI/hbase/outbound/javascript/filter" to="response.body"/>
+            <rewrite apply="HBASEUI/hbase/outbound/html/static" to="response.body"/>
         </route>
         <route path="/hbase/webui/**">
             <rewrite apply="HBASEUI/hbase/inbound/master/path" to="request.url"/>
             <rewrite apply="HBASEUI/hbase/outbound/headers" to="response.headers"/>
             <rewrite apply="HBASEUI/hbase/outbound/javascript/filter" to="response.body"/>
+            <rewrite apply="HBASEUI/hbase/outbound/html/static" to="response.body"/>
         </route>
         <route path="/hbase/webui/static/**">
             <rewrite apply="HBASEUI/hbase/inbound/static" to="request.url"/>
@@ -104,10 +106,12 @@
         <route path="/hbase/webui/master?**">
             <rewrite apply="HBASEUI/hbase/inbound/master/home" to="request.url"/>
             <rewrite apply="HBASEUI/hbase/outbound/live_servers" to="response.body"/>
+            <rewrite apply="HBASEUI/hbase/outbound/html/static" to="response.body"/>
         </route>
         <route path="/hbase/webui/master/{**}?{**}">
             <rewrite apply="HBASEUI/hbase/inbound/master/all_children" to="request.url"/>
             <rewrite apply="HBASEUI/hbase/outbound/master/children" to="response.body"/>
+            <rewrite apply="HBASEUI/hbase/outbound/html/static" to="response.body"/>
         </route>
 
         <!-- Enables loading the RS without /rs-status -->

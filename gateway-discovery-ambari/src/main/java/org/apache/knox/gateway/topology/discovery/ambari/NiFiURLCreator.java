@@ -27,6 +27,13 @@ public class NiFiURLCreator implements ServiceURLCreator {
   static final String CONFIG_TYPE     = "nifi-ambari-config";
   static final String CONFIG_TYPE_SSL = "nifi-ambari-ssl-config";
 
+  // The nifi-2.8.0 mpack registers NiFi as a distinct Ambari service ("NIFI2"), with its own
+  // component and configuration type names, but identical property names to the original NiFi.
+  static final String COMPONENT_NAME_2  = "NIFI2_MASTER";
+  static final String CONFIG_SERVICE_2  = "NIFI2";
+  static final String CONFIG_TYPE_2     = "nifi2-ambari-config";
+  static final String CONFIG_TYPE_SSL_2 = "nifi2-ambari-ssl-config";
+
   static final String SSL_ENABLED_PROPERTY = "nifi.node.ssl.isenabled";
 
   static final String SCHEME_HTTP  = "http";
@@ -53,12 +60,22 @@ public class NiFiURLCreator implements ServiceURLCreator {
     List<String> urls = new ArrayList<>();
 
     AmbariComponent component = cluster.getComponent(COMPONENT_NAME);
+    String ambariService = CONFIG_SERVICE;
+    String configType    = CONFIG_TYPE;
+    String configTypeSSL = CONFIG_TYPE_SSL;
+    if (component == null) {
+      component     = cluster.getComponent(COMPONENT_NAME_2);
+      ambariService = CONFIG_SERVICE_2;
+      configType    = CONFIG_TYPE_2;
+      configTypeSSL = CONFIG_TYPE_SSL_2;
+    }
+
     if (component != null) {
-      AmbariCluster.ServiceConfiguration sc = cluster.getServiceConfiguration(service, CONFIG_TYPE);
+      AmbariCluster.ServiceConfiguration sc = cluster.getServiceConfiguration(ambariService, configType);
       if (sc != null) {
         Map<String, String> configProps = sc.getProperties();
 
-        boolean isSSLEnabled = isSSLEnabled(service);
+        boolean isSSLEnabled = isSSLEnabled(ambariService, configTypeSSL);
         String scheme = isSSLEnabled ? SCHEME_HTTPS : SCHEME_HTTP;
         String port = isSSLEnabled ? configProps.get(SSL_PORT_PROPERTY) : configProps.get(PORT_PROPERTY);
 
@@ -70,10 +87,10 @@ public class NiFiURLCreator implements ServiceURLCreator {
     return urls;
   }
 
-  private boolean isSSLEnabled(String service) {
+  private boolean isSSLEnabled(String service, String configTypeSSL) {
     boolean isSSLEnabled = false;
 
-    AmbariCluster.ServiceConfiguration config = cluster.getServiceConfiguration(service, CONFIG_TYPE_SSL);
+    AmbariCluster.ServiceConfiguration config = cluster.getServiceConfiguration(service, configTypeSSL);
     if (config != null) {
       isSSLEnabled = Boolean.valueOf(config.getProperties().getOrDefault(SSL_ENABLED_PROPERTY, "false"));
     }

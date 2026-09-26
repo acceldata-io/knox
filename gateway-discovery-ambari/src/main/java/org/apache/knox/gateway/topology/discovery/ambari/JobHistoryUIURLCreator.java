@@ -18,37 +18,31 @@ package org.apache.knox.gateway.topology.discovery.ambari;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-public abstract class SparkCommonServiceURLCreator implements ServiceURLCreator {
+/**
+ * A ServiceURLCreator implementation for JOBHISTORYUI (MapReduce2's JobHistoryServer web UI).
+ * mapreduce.jobhistory.webapp.address is already a combined host:port value, so it can be used
+ * directly as the URL authority, the same way HDFSURLCreatorBase treats dfs.namenode.http-address.
+ */
+public class JobHistoryUIURLCreator implements ServiceURLCreator {
 
-  private static final String SCHEME_HTTP  = "http";
-  private static final String SCHEME_HTTPS = "https";
+  private static final String SERVICE = "JOBHISTORYUI";
 
-  private static final String URL_TEMPLATE = "%s://%s:%s";
+  private static final String COMPONENT = "HISTORYSERVER";
 
-  protected AmbariCluster cluster;
+  private static final String ADDRESS_PROPERTY = "mapreduce.jobhistory.webapp.address";
 
-  String primaryComponentName;
-
-  String secondaryComponentName;
-
-  String tertiaryComponentName;
-
-  String portConfigProperty;
+  private AmbariCluster cluster;
 
   @Override
   public void init(AmbariCluster cluster) {
     this.cluster = cluster;
   }
 
-  boolean isSSL(AmbariComponent comp) {
-    return false;
-  }
-
-  String getPort(AmbariComponent comp) {
-    return comp.getConfigProperty(portConfigProperty);
+  @Override
+  public String getTargetService() {
+    return SERVICE;
   }
 
   @Override
@@ -56,23 +50,16 @@ public abstract class SparkCommonServiceURLCreator implements ServiceURLCreator 
     List<String> urls = new ArrayList<>();
 
     if (getTargetService().equalsIgnoreCase(service)) {
-      AmbariComponent comp = cluster.getComponent(primaryComponentName);
-      if (comp == null) {
-        comp = cluster.getComponent(secondaryComponentName);
-      }
-      if (comp == null && tertiaryComponentName != null) {
-        comp = cluster.getComponent(tertiaryComponentName);
-      }
-
+      AmbariComponent comp = cluster.getComponent(COMPONENT);
       if (comp != null) {
-        String port = getPort(comp);
-        List<String> hostNames = comp.getHostNames();
-        for (String host : hostNames) {
-          urls.add(String.format(Locale.ROOT, URL_TEMPLATE, (isSSL(comp) ? SCHEME_HTTPS : SCHEME_HTTP), host, port));
+        String address = comp.getConfigProperty(ADDRESS_PROPERTY);
+        if (address != null && !address.isEmpty()) {
+          urls.add("http://" + address);
         }
       }
     }
 
     return urls;
   }
+
 }

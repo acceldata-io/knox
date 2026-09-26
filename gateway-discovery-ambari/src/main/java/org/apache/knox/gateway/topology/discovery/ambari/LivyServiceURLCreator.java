@@ -25,6 +25,7 @@ public class LivyServiceURLCreator extends SparkCommonServiceURLCreator {
     super.init(cluster);
     primaryComponentName   = "LIVY_SERVER";
     secondaryComponentName = "LIVY2_SERVER";
+    tertiaryComponentName  = "LIVY3_SERVER";
     portConfigProperty     = "livy.server.port";
   }
 
