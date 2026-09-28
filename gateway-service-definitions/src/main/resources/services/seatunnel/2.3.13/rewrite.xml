@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!--
+    Rewrite rules for the SEATUNNEL Knox service.
+
+    Topology exposes SeaTunnel behind:
+        https://{knox-host}:{knox-port}/gateway/{topology}/seatunnel
+
+    Inbound  : strip the gateway prefix, forward to {$serviceUrl[SEATUNNEL]}
+               (the <url> declared in the topology's <service><role>SEATUNNEL</role>).
+    Outbound : rewrite absolute /assets/** and /favicon.ico URLs in the
+               served HTML so the browser fetches them back through Knox
+               instead of trying to reach the master's port directly.
+-->
+<rules>
+    <rule dir="IN" name="SEATUNNEL/seatunnel/inbound/root"
+          pattern="*://*:*/**/seatunnel/">
+        <rewrite template="{$serviceUrl[SEATUNNEL]}/"/>
+    </rule>
+    <rule dir="IN" name="SEATUNNEL/seatunnel/inbound/path"
+          pattern="*://*:*/**/seatunnel/{**}?{**}">
+        <rewrite template="{$serviceUrl[SEATUNNEL]}/{**}?{**}"/>
+    </rule>
+
+    <!-- The SPA hard-codes root-anchored URLs (href="/favicon.ico",
+         src="/assets/index-*.js"). Rewrite them so the browser fetches
+         through Knox. -->
+    <rule dir="OUT" name="SEATUNNEL/seatunnel/outbound/asset"
+          pattern="/assets/{**}">
+        <rewrite template="{$frontend[url]}/seatunnel/assets/{**}"/>
+    </rule>
+    <rule dir="OUT" name="SEATUNNEL/seatunnel/outbound/favicon"
+          pattern="/favicon.ico">
+        <rewrite template="{$frontend[url]}/seatunnel/favicon.ico"/>
+    </rule>
+
+    <filter name="SEATUNNEL/seatunnel/outbound/html-body">
+        <content type="application/xml"/>
+        <content type="text/html">
+            <apply path="/assets/{**}" rule="SEATUNNEL/seatunnel/outbound/asset"/>
+            <apply path="/favicon.ico" rule="SEATUNNEL/seatunnel/outbound/favicon"/>
+        </content>
+    </filter>
+</rules>
