@@ -34,6 +34,8 @@ public abstract class SparkCommonServiceURLCreator implements ServiceURLCreator 
 
   String secondaryComponentName;
 
+  String tertiaryComponentName;
+
   String portConfigProperty;
 
   @Override
@@ -57,6 +59,9 @@ public abstract class SparkCommonServiceURLCreator implements ServiceURLCreator 
       AmbariComponent comp = cluster.getComponent(primaryComponentName);
       if (comp == null) {
         comp = cluster.getComponent(secondaryComponentName);
+      }
+      if (comp == null && tertiaryComponentName != null) {
+        comp = cluster.getComponent(tertiaryComponentName);
       }
 
       if (comp != null) {

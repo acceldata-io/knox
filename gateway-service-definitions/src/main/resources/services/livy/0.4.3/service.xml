@@ -23,12 +23,20 @@
     <description>Apache Livy is a service that enables easy interaction with a Spark cluster over a REST interface.</description>
   </metadata>
   <routes>
-    <route path="/livy/**?**"/>
+    <route path="/livy/**?**">
+      <rewrite apply="LIVYSERVER/livy/outbound/html/static" to="response.body"/>
+    </route>
     <route path="/livy">
       <rewrite apply="LIVYSERVER/livy/outbound/headers" to="response.headers"/>
+      <rewrite apply="LIVYSERVER/livy/outbound/html/static" to="response.body"/>
     </route>
     <route path="/livy/">
       <rewrite apply="LIVYSERVER/livy/outbound/headers" to="response.headers"/>
+      <rewrite apply="LIVYSERVER/livy/outbound/html/static" to="response.body"/>
+    </route>
+    <route path="/livy/**">
+      <rewrite apply="LIVYSERVER/livy/outbound/headers" to="response.headers"/>
+      <rewrite apply="LIVYSERVER/livy/outbound/html/static" to="response.body"/>
     </route>
   </routes>
   <dispatch classname="org.apache.knox.gateway.livy.LivyDispatch"/>
